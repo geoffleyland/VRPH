@@ -4074,7 +4074,7 @@ bool VRP::check_fixed_edges(const char *message)
                         fprintf(stderr,"Fixed edge %d-%d not in solution!!",i,j);
                         fprintf(stderr,"%d-%d-%d\n",VRPH_MAX(this->pred_array[i],VRPH_DEPOT),i,
                             VRPH_MAX(this->next_array[i],VRPH_DEPOT));
-                        fprintf(stderr,message);
+                        fprintf(stderr, "%s", message);
 
                         if(this->fixed[j][i])
                             fprintf(stderr,"%d-%d also fixed\n",j,i);
@@ -4093,7 +4093,7 @@ bool VRP::check_fixed_edges(const char *message)
                         fprintf(stderr,"Fixed edge %d-%d not in solution!!",i,j);
                         fprintf(stderr,"%d-%d-%d\n",VRPH_MAX(this->pred_array[j],VRPH_DEPOT),j,
                             VRPH_MAX(this->next_array[j],VRPH_DEPOT));
-                        fprintf(stderr,message);
+                        fprintf(stderr, "%s", message);
                         if(this->fixed[j][i])
                             fprintf(stderr,"%d-%d also fixed\n",j,i);
                         else
