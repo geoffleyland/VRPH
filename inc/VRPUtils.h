@@ -83,14 +83,6 @@ public:
 };
 
 
-
-class VRPSeedElement 
-{
-	double val;
-	int position;
-	int demand;
-};
-
 class VRPNeighborhood
 {
 public:
