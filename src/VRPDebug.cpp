@@ -166,6 +166,7 @@ bool VRP::verify_routes(const char *message)
             if(VRPH_ABS(len-total_route_length)<.01 && flag==0 )
             {
                 // everything looks good
+                fprintf(stderr, "VRP::verify_routes: Verification at '%s' passed\n", message);
                 return true;
             }
             else
@@ -292,6 +293,7 @@ bool VRP::verify_routes(const char *message)
         }
     }
 
+    fprintf(stderr, "VRP::verify_routes: Verification at '%s' passed\n", message);
     return true;
 }    
 
@@ -306,6 +308,7 @@ void report_error(const char* format, ...)
     va_start(args, format);
     vfprintf(stderr, format, args);
     va_end(args);
+    fprintf(stderr, "\n");
 
     fprintf(stderr,"Exiting\n");
     exit(-1);
