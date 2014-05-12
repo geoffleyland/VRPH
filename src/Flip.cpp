@@ -60,6 +60,15 @@ bool Flip::evaluate(class VRP *V, int start_point, int end_point, VRPMove *M)
     new_cost=(V->d[start_point][pre_end]-1*V->nodes[pre_end].service_time) + 
         (V->d[post_start][end_point] - 1*V->nodes[end_point].service_time);
 
+    int current = post_start;
+    while (current != pre_end)
+    {
+      int next = V->next_array[current];
+      old_cost += V->d[current][next];
+      new_cost += V->d[next][current];
+      current = next;
+    }
+
     savings=new_cost - old_cost;
     
     // The move satisfies the savings rules - now check feasibility...
