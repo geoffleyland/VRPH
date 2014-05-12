@@ -647,7 +647,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
             s =(double)(atof(strtok(NULL,"")));
             fixed_service_time=s;
 #if TSPLIB_DEBUG
-            printf("Setting service time to %f for all nodes\n");
+            printf("Setting service time to %f for all nodes\n", fixed_service_time);
 #endif
             total_service_time=0;
             for(i=1;i<=num_nodes;i++)
