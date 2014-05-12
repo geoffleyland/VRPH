@@ -889,6 +889,10 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
 
 bool TwoOpt::move(class VRP *V, VRPMove *M)
 {
+#if TWO_OPT_VERIFY
+    V->verify_routes("TwoOpt::entry");
+#endif
+
     ///
     /// Makes the actual solution modification implied by the Two-Opt
     /// move involving edges a-b and c-d.  Handles both intraroute and interroute
@@ -941,6 +945,11 @@ bool TwoOpt::move(class VRP *V, VRPMove *M)
                 V->remove_dummy();
 
             V->capture_best_solution();
+
+#if TWO_OPT_VERIFY
+    V->verify_routes("TwoOpt::after flip");
+#endif
+
             return true;
         }
         else
@@ -959,6 +968,10 @@ bool TwoOpt::move(class VRP *V, VRPMove *M)
             V->remove_dummy();
         
         V->capture_best_solution();
+
+#if TWO_OPT_VERIFY
+    V->verify_routes("TwoOpt::after swap");
+#endif
 
         return true;
     }

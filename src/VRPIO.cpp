@@ -1193,8 +1193,10 @@ void VRP::import_solution_buff(int *sol_buff)
     total_number_of_routes=rnum;
     create_pred_array();
 
+#if VERIFY_ALL
     // Make sure everything imported successfully!
     verify_routes("After import sol_buff\n");
+#endif
 
     // Mark all the nodes as "routed"
     for(i=1;i<=sol_buff[0];i++)

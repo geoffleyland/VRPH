@@ -391,6 +391,11 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
             break;
         }
         // End switch statement
+#if CW_VERIFY
+    V->verify_routes("ClarkeWright::Construct: looping");
+#endif
+
+
     }
 
 #if CW_DEBUG
@@ -411,6 +416,10 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
 
 #if CW_DEBUG
     printf("Done normalizing\n");
+#endif
+
+#if CW_VERIFY
+    V->verify_routes("ClarkeWright::Construct: leaving\n");
 #endif
 
     return true;

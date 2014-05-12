@@ -21,6 +21,7 @@
 #define VERIFY_ALL              0
 
 #define CW_DEBUG                0
+#define CW_VERIFY               0 + VERIFY_ALL
 
 #define CLEAN_DEBUG             0
 

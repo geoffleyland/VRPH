@@ -338,6 +338,10 @@ int main(int argc, char *argv[])
             if(verbose)
                 printf("CW solution %d[L=%1.4f]: %5.4f\n",i,lambda_vals[i], V.get_total_route_length());
 
+#if VERIFY_ALL
+            V.verify_routes("vrp_rtr:main: After CW\n");
+#endif
+
             // Run the record-to-record travel algorithm with the given parameters
             V.RTR_solve(heuristics, intensity, max_tries, num_perturbs, dev, nlist_size, 
                 perturb_type, accept_type, verbose);

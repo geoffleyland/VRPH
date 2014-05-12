@@ -26,6 +26,10 @@ double VRP::RTR_solve(int heuristics, int intensity, int max_stuck, int max_pert
     // Make sure accept_type is either VRPH_BEST_ACCEPT or VRPH_FIRST_ACCEPT - matters only
     // for the downhill phase as we use VRPH_LI_ACCEPT in the diversification phase
 
+#if VERIFY_ALL
+    this->verify_routes("VRP::RTR_solve: entry");
+#endif
+
     if(accept_type!=VRPH_BEST_ACCEPT && accept_type!=VRPH_FIRST_ACCEPT)
         report_error("%s: accept_type must be VRPH_BEST_ACCEPT or VRPH_FIRST_ACCEPT\n");
 
@@ -118,6 +122,10 @@ uphill:
     
     for(int k=1;k<intensity;k++)
     {
+#if VERIFY_ALL
+      this->verify_routes("VRP::RTR_solve: uphill iteration start");
+#endif
+
         start_val=total_route_length;
 
         if(heuristics & ONE_POINT_MOVE)
@@ -156,6 +164,9 @@ uphill:
 
         }
 
+#if VERIFY_ALL
+        this->verify_routes("VRP::RTR_solve: before three point move");
+#endif
 
         if(heuristics & THREE_POINT_MOVE)
         {
@@ -169,7 +180,9 @@ uphill:
 
         }
 
-
+#if VERIFY_ALL
+        this->verify_routes("VRP::RTR_solve: before two-opt");
+#endif
 
         if(heuristics & TWO_OPT)
         {
@@ -177,13 +190,21 @@ uphill:
                 random_permutation(perm, this->num_nodes);
 
             for(i=1;i<=n;i++)    
-                TO.search(this,perm[i-1],rules);
+            {
+              TO.search(this,perm[i-1],rules);
+#if VERIFY_ALL
+              this->verify_routes("VRP::RTR_solve: after two-opt");
+#endif
+            }
 
             //check_fixed_edges("After TO\n");
 
 
         }        
 
+#if VERIFY_ALL
+        this->verify_routes("VRP::RTR_solve: after two-opt");
+#endif
 
         if(heuristics & OR_OPT)
         {
