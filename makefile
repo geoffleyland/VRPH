@@ -1,8 +1,8 @@
 # Set compiler and flags
 CC=g++
-CFLAGS= -O3 -Wall
+CFLAGS= -O3 -Wall -Wmost
 
-# Set directory for static library and binaries 
+# Set directory for static library and binaries
 # Defaults to ./lib and ./bin
 VRPH_LIB_DIR = ./lib
 VRPH_BIN_DIR = ./bin
@@ -35,10 +35,10 @@ HAS_PLPLOT= 0
 ifeq ($(HAS_PLPLOT),1)
 PLPLOT_INC_DIR= -I$(HOME)/PLPLOT/plplot-5.9.4/x86_64build/include/plplot/
 PLPLOT_LIB_DIR= -L$(HOME)/PLPLOT/plplot-5.9.4/x86_64build/lib/
-PLPLOT_LIB= -lplplotd -lqsastime -lnistcd 
+PLPLOT_LIB= -lplplotd -lqsastime -lnistcd
 PLDEF=-DHAS_PLPLOT
 else
-PLPLOT_INC_DIR= 
+PLPLOT_INC_DIR=
 PLPLOT_LIB_DIR=
 PLPLOT_LIB=
 PLDEF=
@@ -62,7 +62,7 @@ GLPK_DEF=
 GLPK_INC_DIR=
 OSI_INC_DIR=
 OSI_GLPK_INC_DIR=
-endif 
+endif
 
 # Various directories needed by the library and applications
 INC_DIR= -I./inc/
@@ -92,24 +92,24 @@ $(VRPH_LIB): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 	ranlib $@
 	rm -rf $(OBJS)
-	
+
 .cpp.o:
 	$(CC) $(CFLAGS) $(PLDEF) -c $(INC_DIR) $(PLPLOT_INC_DIR) $< -o $@
 
 # An implementation of an RTR-based algorithm for generating solutions
 vrp_rtr: $(OBJS) $(RTR_SRC)
 	mkdir -p $(VRPH_BIN_DIR)
-	$(CC) $(CFLAGS) $(PLDEF) $(PLPLOT_INC_DIR) $(RTR_SRC) $(INC_DIR) $(LIB_DIR) $(PLPLOT_LIB_DIR) $(LIBS) $(PLPLOT_LIB) -o $(RTR_EXE) 
+	$(CC) $(CFLAGS) $(PLDEF) $(PLPLOT_INC_DIR) $(RTR_SRC) $(INC_DIR) $(LIB_DIR) $(PLPLOT_LIB_DIR) $(LIBS) $(PLPLOT_LIB) -o $(RTR_EXE)
 
 # An implementation of a Simulated Annealing-based algorithm for generating solutions
 vrp_sa: $(OBJS) $(SA_SRC)
 	mkdir -p $(VRPH_BIN_DIR)
-	$(CC) $(CFLAGS) $(PLDEF) $(PLPLOT_INC_DIR) $(SA_SRC) $(INC_DIR) $(LIB_DIR) $(PLPLOT_LIB_DIR) $(LIBS) $(PLPLOT_LIB) -o $(SA_EXE) 
+	$(CC) $(CFLAGS) $(PLDEF) $(PLPLOT_INC_DIR) $(SA_SRC) $(INC_DIR) $(LIB_DIR) $(PLPLOT_LIB_DIR) $(LIBS) $(PLPLOT_LIB) -o $(SA_EXE)
 
 # An implementation of a simple routine that demonstrates the Clarke Wright and Sweep algorithms
 vrp_init: $(OBJS) $(INIT_SRC)
 	mkdir -p $(VRPH_BIN_DIR)
-	$(CC) $(CFLAGS) $(INIT_SRC) $(INC_DIR) $(LIB_DIR) $(LIBS) -o $(INIT_EXE) 
+	$(CC) $(CFLAGS) $(INIT_SRC) $(INC_DIR) $(LIB_DIR) $(LIBS) -o $(INIT_EXE)
 
 # An implementation of a tool to plot solutions using PLPLOT
 vrp_plot: $(OBJS) $(PLOT_SRC)
@@ -132,7 +132,7 @@ ifeq ($(HAS_OSI_GLPK),1)
 endif
 
 
-# test - just run the binaries on the test_instance 
+# test - just run the binaries on the test_instance
 # output is sent to $(TEST_OUTPUT) file
 test:
 	-rm -rf $(TEST_OUTPUT).tmp
@@ -153,7 +153,7 @@ ifeq ($(HAS_OSI_GLPK),1)
 	@echo "*************************************"
 	@echo Testing vrp_sp on test_instance.vrp
 	./bin/vrp_sp -f ./test_instance.vrp -n 5 -v >> $(TEST_OUTPUT).tmp
-endif	
+endif
 
 ifeq ($(HAS_PLPLOT),1)
 	@echo "*************************************"
@@ -162,7 +162,7 @@ ifeq ($(HAS_PLPLOT),1)
 	./bin/vrp_plot -f ./test_instance.vrp -s test_instance.sol -p test_instance.ps >> $(TEST_OUTPUT).tmp
 	@echo Postscript plot created in test_instance.ps
 	-rm test_instance.sol
-endif	
+endif
 	mv $(TEST_OUTPUT).tmp $(TEST_OUTPUT)
 	@echo "*************************************"
 	@echo "*************************************"
