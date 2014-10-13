@@ -234,7 +234,7 @@ bool MoveString::move(VRP *V, int a, int b, int u, int v)
 
 #if STRING_DEBUG
         printf("Routes after move:\n");
-        V->show_route(u_route);
+//        V->show_route(u_route);  // I'm not sure what this was supposed to be?
         V->show_route(V->route_num[a]);
 
 #endif
