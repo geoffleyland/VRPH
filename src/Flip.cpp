@@ -54,11 +54,8 @@ bool Flip::evaluate(class VRP *V, int start_point, int end_point, VRPMove *M)
 
 
     // Need to compute the old costs and the new cost - 
-
-    old_cost=(V->d[start_point][post_start]-1*V->nodes[post_start].service_time) + 
-        (V->d[pre_end][end_point] -  1*V->nodes[end_point].service_time) ;
-    new_cost=(V->d[start_point][pre_end]-1*V->nodes[pre_end].service_time) + 
-        (V->d[post_start][end_point] - 1*V->nodes[end_point].service_time);
+    old_cost=V->d[start_point][post_start] + V->d[pre_end][end_point];
+    new_cost=V->d[start_point][pre_end] + V->d[post_start][end_point];
 
     int current = post_start;
     while (current != pre_end)
