@@ -134,7 +134,7 @@ bool SwapEnds::move(VRP *V, int a, int v)
         report_error("%s: swap ends called with a and v in same route!\n",__FUNCTION__);
 
 #if SWAP_VERIFY
-    V->verify_routes("SWAP_ENDS::prior to move\n");
+    V->verify_routes("SWAP_ENDS::prior to move");
 #endif
 
     V->update(&M);
@@ -311,7 +311,7 @@ bool SwapEnds::move(VRP *V, int a, int v)
         }
 
 #if SWAP_ENDS_VERIFY
-        V->verify_routes("SwapEnds 5\n");
+        V->verify_routes("SwapEnds 5");
 #endif
 
         return true;

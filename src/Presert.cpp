@@ -189,7 +189,7 @@ bool Presert::move(VRP *V, int u, int i)
         return false;    //infeasible
 
 #if PRESERT_VERIFY
-    V->verify_routes("Before presert move\n");
+    V->verify_routes("Before presert move");
 #endif
 
 

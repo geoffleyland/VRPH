@@ -156,7 +156,7 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
         V->route[i_route].start=start_j;
         
 #if CONCATENATE_VERIFY
-        V->verify_routes("Concatenate 1\n");
+        V->verify_routes("Concatenate 1");
 #endif
         
         return true;        
@@ -197,7 +197,7 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
 
     
 #if CONCATENATE_VERIFY
-    V->verify_routes("CWConcatenate 2\n");
+    V->verify_routes("CWConcatenate 2");
 #endif
     
     return true;

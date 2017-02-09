@@ -419,7 +419,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
 #endif
 
 #if CW_VERIFY
-    V->verify_routes("ClarkeWright::Construct: leaving\n");
+    V->verify_routes("ClarkeWright::Construct: leaving");
 #endif
 
     return true;

@@ -257,7 +257,7 @@ bool Swap::move(VRP *V, int u, int i)
 #endif
 
 #if SWAP_VERIFY
-            V->verify_routes("Before h==u SWAP\n");
+            V->verify_routes("Before h==u SWAP");
 #endif
         // Put u after i 
         if(postsert.move(V,u,i)==false)
@@ -271,7 +271,7 @@ bool Swap::move(VRP *V, int u, int i)
         else
         {
 #if SWAP_VERIFY
-            V->verify_routes("After h==u SWAP\n");
+            V->verify_routes("After h==u SWAP");
 #endif
 
             return true;
@@ -281,7 +281,7 @@ bool Swap::move(VRP *V, int u, int i)
     if(jj==u)
     {
 #if SWAP_VERIFY
-        V->verify_routes("Before j==u SWAP\n");        
+        V->verify_routes("Before j==u SWAP");        
 #endif
         // We have h-i/t-u/j-v, so just put i after u
         double t1= V->max_route_length;
@@ -297,7 +297,7 @@ bool Swap::move(VRP *V, int u, int i)
         V->max_veh_capacity=t2;
 
 #if SWAP_VERIFY
-        V->verify_routes("After j==u SWAP\n");        
+        V->verify_routes("After j==u SWAP");        
 #endif
 
         return true;
@@ -306,7 +306,7 @@ bool Swap::move(VRP *V, int u, int i)
     if(hh==vv)
     {
 #if SWAP_VERIFY
-        V->verify_routes("Before h==v SWAP\n");        
+        V->verify_routes("Before h==v SWAP");        
 #endif
 
 
@@ -346,7 +346,7 @@ bool Swap::move(VRP *V, int u, int i)
         V->max_route_length=t1;
         V->max_veh_capacity=t2;
 #if SWAP_VERIFY
-            V->verify_routes("After h==v SWAP\n");
+            V->verify_routes("After h==v SWAP");
 #endif
 
         return true;
@@ -357,7 +357,7 @@ bool Swap::move(VRP *V, int u, int i)
     {
 
 #if SWAP_VERIFY
-            V->verify_routes("Before j==t SWAP\n");
+            V->verify_routes("Before j==t SWAP");
 #endif
 
         //Current:        h-i-j/t-u-v
@@ -393,14 +393,14 @@ bool Swap::move(VRP *V, int u, int i)
         V->max_veh_capacity=t2;
 
 #if SWAP_VERIFY
-            V->verify_routes("After j==t SWAP\n");
+            V->verify_routes("After j==t SWAP");
 #endif
 
         return true;
     }
 
 #if SWAP_VERIFY
-            V->verify_routes("Before normal SWAP\n");
+            V->verify_routes("Before normal SWAP");
 #endif
     // Here is the "normal" case
 
@@ -483,7 +483,7 @@ bool Swap::move(VRP *V, int u, int i)
 
 
 #if SWAP_VERIFY
-        V->verify_routes("After inter SWAP\n");        
+        V->verify_routes("After inter SWAP");        
 #endif
 
     }
@@ -514,7 +514,7 @@ bool Swap::move(VRP *V, int u, int i)
         }
 
 #if SWAP_VERIFY
-        V->verify_routes("After intra SWAP\n");        
+        V->verify_routes("After intra SWAP");        
 #endif
 
 

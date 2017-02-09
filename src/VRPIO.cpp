@@ -1079,7 +1079,7 @@ void VRP::read_solution_file(const char *filename)
     fclose(in);
     delete [] new_sol;
 
-    this->verify_routes("After read_solution_file\n");
+    this->verify_routes("After read_solution_file");
 
     memcpy(this->best_sol_buff,this->current_sol_buff,(this->num_nodes+2)*sizeof(int));
 
@@ -1195,7 +1195,7 @@ void VRP::import_solution_buff(int *sol_buff)
 
 #if VERIFY_ALL
     // Make sure everything imported successfully!
-    verify_routes("After import sol_buff\n");
+    verify_routes("After import sol_buff");
 #endif
 
     // Mark all the nodes as "routed"

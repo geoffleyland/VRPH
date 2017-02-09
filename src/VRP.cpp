@@ -2524,7 +2524,7 @@ void VRP::eject_neighborhood(int j, int num, int *nodelist)
     }
 
 #if 0
-    this->verify_routes("After ejecting neighborhood\n");
+    this->verify_routes("After ejecting neighborhood");
 #endif
     delete [] ejected;
 
@@ -3759,7 +3759,7 @@ void VRP::add_route(int *route_buff)
 
     int *temp_buff;
 
-    this->verify_routes("Before adding route\n");
+    this->verify_routes("Before adding route");
 
     temp_buff=new int[this->num_original_nodes+2];
     this->export_solution_buff(temp_buff);
@@ -3782,7 +3782,7 @@ void VRP::add_route(int *route_buff)
     // Now import the new solution
     this->import_solution_buff(temp_buff);
     
-    this->verify_routes("After adding route\n");
+    this->verify_routes("After adding route");
 
     delete [] temp_buff;
 

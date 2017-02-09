@@ -241,7 +241,7 @@ bool MoveString::move(VRP *V, int a, int b, int u, int v)
 
 
 #if STRING_VERIFY
-        V->verify_routes("After Postsert move string\n");
+        V->verify_routes("After Postsert move string");
 #endif
     }
     else
@@ -276,7 +276,7 @@ bool MoveString::move(VRP *V, int a, int b, int u, int v)
 
 
 #if STRING_VERIFY
-        V->verify_routes("After movestring\n");
+        V->verify_routes("After movestring");
 #endif
     }
 

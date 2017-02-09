@@ -158,7 +158,7 @@ bool Flip::move(VRP *V, int start_point, int end_point)
         V->pred_array[end]=pre_start;
 
 #if FLIP_VERIFY
-        V->verify_routes("flip 1\n");
+        V->verify_routes("flip 1");
 #endif
 
         return true;
