@@ -58,12 +58,15 @@ bool Flip::evaluate(class VRP *V, int start_point, int end_point, VRPMove *M)
     new_cost=V->d[start_point][pre_end] + V->d[post_start][end_point];
 
     int current = post_start;
-    while (current != pre_end)
+    if (!V->symmetric)
     {
-      int next = V->next_array[current];
-      old_cost += V->d[current][next];
-      new_cost += V->d[next][current];
-      current = next;
+      while (current != pre_end)
+      {
+        int next = V->next_array[current];
+        old_cost += V->d[current][next];
+        new_cost += V->d[next][current];
+        current = next;
+      }
     }
 
     savings=new_cost - old_cost;
