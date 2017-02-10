@@ -1,3 +1,12 @@
+This version of VRPH is a fork of [COIN's VRPH](https://projects.coin-or.org/VRPH),
+with a number of bugs fixed.  The first commit is a copy of VRPH 1.0.
+I've reported the bugs upstream, but Chris has other things to do.
+
+
+What follows is the original README: 
+
+
+
 VRPH is a library of heuristics for quickly generating
 solutions to Vehicle Routing Problems.  VRPH was
 developed by Chris Groer as part of his dissertation at
