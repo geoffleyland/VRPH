@@ -1253,14 +1253,18 @@ void VRP::export_canonical_solution_buff(int *sol_buff)
     
     this->normalize_route_numbers();
 
-    // First orient each route properly
-    for(i=1;i<=total_number_of_routes;i++)
+    // First orient each route properly if the problem is symmetric
+    if (this->symmetric)
     {
-        if(route[i].end<route[i].start)
-            reverse_route(i);
-
-        start_buff[i-1]=route[i].start;
+        for(i=1;i<=total_number_of_routes;i++)
+        {
+            if(route[i].end<route[i].start)
+                reverse_route(i);
+        }
     }
+
+    for(i=1;i<=total_number_of_routes;i++)
+        start_buff[i-1]=route[i].start;
 
 
     // Sort the start_buff
