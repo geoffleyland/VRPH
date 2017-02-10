@@ -1,2 +1,8 @@
 bin
 lib
+x64
+Release
+*.VC.db
+*.vcxproj.filters
+.vs
+.DS_Store
