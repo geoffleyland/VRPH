@@ -3,6 +3,7 @@ lib
 x64
 Release
 *.VC.db
+*.VC.VC.opendb
 *.vcxproj.filters
 .vs
 .DS_Store
