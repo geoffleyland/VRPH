@@ -47,11 +47,11 @@ int main(int argc, char *argv[])
     int heuristics=0;
 
     if(argc<2 || (strncmp(argv[1],"-help",5)==0)||(strncmp(argv[1],"--help",6)==0)||(strncmp(argv[1],"-h",2)==0))
-    {        
+    {
         fprintf(stderr,"Usage: %s -f <vrp_input_file> [options]\n",argv[0]);
         fprintf(stderr,"Options:\n");
 
-        fprintf(stderr,"\t-help prints this help message\n"); 
+        fprintf(stderr,"\t-help prints this help message\n");
 
         fprintf(stderr,"\t-sol <solfile> begins with an existing solution contained\n");
         fprintf(stderr,"\t\t in solfile.\n");
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
             }
 
             if(verbose)
-                printf("Improved solution: %f\n",this_obj);        
+                printf("Improved solution: %f\n",this_obj);
 
         }
     }
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
             V.export_canonical_solution_buff(best_sol);
         }
         if(verbose)
-            printf("Improved solution: %f\n",this_obj);    
+            printf("Improved solution: %f\n",this_obj);
 
     }
 

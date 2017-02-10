@@ -18,7 +18,7 @@ VRPRoute::VRPRoute()
 {
     ///
     /// Default constructor for the VRPRoute.
-    /// 
+    ///
 
     this->name=NULL;
     this->ordering=NULL;
@@ -30,7 +30,7 @@ VRPRoute::VRPRoute()
 VRPRoute::VRPRoute(int n)
 {
     ///
-    /// Allocates memory for the VRPRoute fields large enough 
+    /// Allocates memory for the VRPRoute fields large enough
     /// for an n node problem.
     ///
 
@@ -54,7 +54,7 @@ VRPRoute::~VRPRoute()
         delete [] this->ordering;
     if(this->x)
         delete [] this->x;
-    if(this->y)    
+    if(this->y)
         delete [] this->y;
 
 }
@@ -62,8 +62,8 @@ VRPRoute::~VRPRoute()
 
 int VRPRoute::hash(int salt)
 {
-    /// 
-    /// Computes a hash of the route, 
+    ///
+    /// Computes a hash of the route,
     /// returning an integer in the range [0,HASH_TABLE_SIZE-1].
     ///
 
@@ -75,7 +75,7 @@ int VRPRoute::hash(int salt)
         return 0;
 
     int i;
-    
+
     if(this->ordering[num_customers-1]<this->ordering[0])
     {
         fprintf(stderr,"Route has %d customers\n",this->num_customers);
@@ -84,12 +84,12 @@ int VRPRoute::hash(int salt)
             fprintf(stderr,"%d ",this->ordering[i]);
         fprintf(stderr,"Length=%f;\nLoad=%d\nObj=%fStart=%d\nEnd=%d\n",this->length,this->load,this->obj_val,
             this->start,this->end);
-    
+
         report_error("%s: Error in route hash\n",__FUNCTION__);
     }
 
     int val = 0;
-  
+
     for(i=0;i<this->num_customers; i++)
         val ^= (randvals[(salt + VRPH_ABS(this->ordering[i])+
         VRPH_ABS(this->ordering[VRPH_MIN((this->num_customers)-1,i+1)]) )% NUM_RANDVALS]);
@@ -99,7 +99,7 @@ int VRPRoute::hash(int salt)
 
     val=val&(HASH_TABLE_SIZE-1);
     // Get the right # of bits
-    
+
     return val;
 
 }
@@ -122,7 +122,7 @@ void VRPRoute::create_name()
     int i;
     char temp[100];
 
-    // Write the hash value    
+    // Write the hash value
     sprintf(this->name,"%d_%d_",this->hash(SALT_1),this->hash(SALT_2));
 
     // Write the ordering
@@ -133,7 +133,7 @@ void VRPRoute::create_name()
     }
     sprintf(temp,"%d",this->ordering[this->num_customers-1]);
     strcat(this->name,(const char *)temp);
-   
+
     return;
 
 }
@@ -160,11 +160,11 @@ VRPRouteWarehouse::VRPRouteWarehouse(int h_size)
     this->hash_table=new struct htable_entry[h_size];
 
     this->hash_table_size=h_size;
-    this->num_unique_routes=0;    
+    this->num_unique_routes=0;
 
     for(int i=0;i<h_size;i++)
         this->hash_table[i].num_vals=0;
-        
+
 }
 
 
@@ -211,7 +211,7 @@ void VRPRouteWarehouse::remove_route(int hash_val, int hash_val2)
     // Look for the second hash value
     for(i=0;i<this->hash_table[hash_val].num_vals;i++)
     {
-        if( this->hash_table[hash_val].hash_val_2[i]==hash_val2) 
+        if( this->hash_table[hash_val].hash_val_2[i]==hash_val2)
         {
             // This is the one to remove-shift everyone else down one
             // and decrement num_vals
@@ -237,9 +237,9 @@ void VRPRouteWarehouse::remove_route(int hash_val, int hash_val2)
     fprintf(stderr,"Never found the route when removing from WH!!!\n");
     fprintf(stderr,"Looking for (%d, %d)\n",hash_val, hash_val2);
     for(i=0;i<this->hash_table[hash_val].num_vals;i++)
-        fprintf(stderr,"Position %d:  (%d, %d, %f)\n",i, hash_val, 
+        fprintf(stderr,"Position %d:  (%d, %d, %f)\n",i, hash_val,
             this->hash_table[hash_val].hash_val_2[i], hash_table[hash_val].length[i]);
-    
+
     report_error("%s: Error removing route from WH\n",__FUNCTION__);
 
 }
@@ -276,7 +276,7 @@ int VRPRouteWarehouse::add_route(VRPRoute *R)
             }
             fflush(stderr);
             report_error("%s: Error adding route to WH\n",__FUNCTION__);
-        }        
+        }
 
         // Otherwise, there is room in the table
         for(i=0;i<this->hash_table[hval].num_vals;i++)
@@ -284,10 +284,10 @@ int VRPRouteWarehouse::add_route(VRPRoute *R)
             // Compare the second hash value-
             if(this->hash_table[hval].hash_val_2[i] == hval2)
             {
-                
-                // These surely must cover the same nodes - now see if we have 
+
+                // These surely must cover the same nodes - now see if we have
                 // a lower cost tour
-                if(R->length<this->hash_table[hval].length[i] && 
+                if(R->length<this->hash_table[hval].length[i] &&
                     VRPH_ABS(R->length - this->hash_table[hval].length[i])>VRPH_EPSILON)
                 {
                     this->hash_table[hval].length[i]=R->length;
@@ -296,7 +296,7 @@ int VRPRouteWarehouse::add_route(VRPRoute *R)
                 else
                     return DUPLICATE_ROUTE;
                     // The column/route was the same or worse.
-                
+
             }
         }
 
@@ -307,7 +307,7 @@ int VRPRouteWarehouse::add_route(VRPRoute *R)
             R->length ;
         this->hash_table[hval].hash_val_2[this->hash_table[hval].num_vals]=
             hval2;
-        
+
         this->hash_table[hval].num_vals++;
         this->num_unique_routes++;
         return ADDED_ROUTE;

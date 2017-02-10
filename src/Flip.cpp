@@ -14,15 +14,15 @@
 
 
 bool Flip::evaluate(class VRP *V, int start_point, int end_point, VRPMove *M)
-{    
+{
     ///
     /// Evaluates the move of reversing a portion of a route in between nodes
-    /// start and end.  
+    /// start and end.
     /// Example:  0-a-b-start-d-e-f-g-h-end-x-y-z-0 becomes
     ///           0-a-b-start-h-g-f-e-d-end-x-y-z-0.
     /// If the move is feasible, the information
     /// regarding the move is stored in the VRPMove data structure M.
-    /// start_point must be before end_point in the current route orientation.  
+    /// start_point must be before end_point in the current route orientation.
     ///
 
     int post_start, pre_end, route_num;
@@ -53,7 +53,7 @@ bool Flip::evaluate(class VRP *V, int start_point, int end_point, VRPMove *M)
         return false;    // Nothing to reverse!
 
 
-    // Need to compute the old costs and the new cost - 
+    // Need to compute the old costs and the new cost -
     old_cost=V->d[start_point][post_start] + V->d[pre_end][end_point];
     new_cost=V->d[start_point][pre_end] + V->d[post_start][end_point];
 
@@ -70,7 +70,7 @@ bool Flip::evaluate(class VRP *V, int start_point, int end_point, VRPMove *M)
     }
 
     savings=new_cost - old_cost;
-    
+
     // The move satisfies the savings rules - now check feasibility...
 
     route_len= V->route[route_num].length;

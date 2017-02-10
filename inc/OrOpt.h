@@ -22,7 +22,7 @@ public:
 
 private:
     bool evaluate(class VRP *V, int a, int len, int c, int d, int rules, VRPMove *M);
-    bool move(class VRP *V, VRPMove *M);	
+    bool move(class VRP *V, VRPMove *M);
 
 };
 

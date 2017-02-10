@@ -13,14 +13,14 @@
 /*                                                                           */
 /*===========================================================================*/
 
-// This file is a modified version of SYMPHONY's vrp_main.c file that 
+// This file is a modified version of SYMPHONY's vrp_main.c file that
 // adds the ability to determine an initial upper bound by running
 // heuristics from the VRPH library.
 // This capability can be turned off by setting USE_VRPH 0 below.
 
 #define COMPILING_FOR_MASTER
 #define USE_VRPH 1
-// We will have VRPH generate NUM_VRPH_SOLUTIONS 
+// We will have VRPH generate NUM_VRPH_SOLUTIONS
 #define NUM_VRPH_SOLUTIONS 10
 /*===========================================================================*/
 
@@ -37,20 +37,20 @@ int main(int argc, char **argv)
    OsiSymSolverInterface si;
 
    //si.setSymParam(OsiSymVerbosity, 3);
-   si.setSymParam(OsiSymGranularity, 0.9999); 
+   si.setSymParam(OsiSymGranularity, 0.9999);
    si.setSymParam("generate_cgl_cuts", FALSE);
    si.setSymParam("lp_executable_name", "vrp_lp_cg");
    si.setSymParam("cp_executable_name", "vrp_cp");
-   
+
    /* Parse the command line */
    si.parseCommandLine(argc, argv);
-   
+
    /* Read in the problem */
    si.loadProblem();
 
    /* Find a priori problem bounds */
    si.findInitialBounds();
-   
+
    /* Solve the problem */
    si.branchAndBound();
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
    sym_parse_command_line(env, argc, argv);
 
    sym_get_user_data(env, (void**)&vrp);
-   
+
 #if USE_VRPH
    // Get the size of the problem in the input file
    int n=VRPGetDimension(vrp->par.infile);
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
    VRP V(n);
    // Declare a ClarkeWright object of size n
    ClarkeWright CW(n);
- 
+
    // Populate the VRP object with the input file
    V.read_TSPLIB_file(vrp->par.infile);
 
@@ -117,11 +117,11 @@ int main(int argc, char **argv)
        {
            best_sol=V.get_total_route_length()-V.get_total_service_time();
            V.export_canonical_solution_buff(best_sol_buff);
-       }                     
+       }
        // Reset VRPH's internal data structures
        V.reset();
    }
-   
+
    // Import the best solution and display it - if SYMPHONY claims an infeasibility
    // because the VRPH solution is optimal, we wouldn't see it otherwise!
    printf("VRPH set SYMPHONY upper bound to %f based on solution:\n",best_sol);
@@ -145,15 +145,15 @@ int main(int argc, char **argv)
    // file.  Thus, we changed the following line
    // if (vrp->par.test){
    if (0 && vrp->par.test){
- 
+
      vrp_test(env, argc, argv);
 
    } else {
 
      sym_load_problem(env);
-     
+
      sym_find_initial_bounds(env);
-     
+
      sym_set_str_param(env, "lp_executable_name", "vrp_lp_cg");
      sym_set_str_param(env, "cp_executable_name", "vrp_cp");
      sym_set_int_param(env, "generate_cgl_cuts", FALSE);
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
    }
 
    sym_close_environment(env);
-     
+
    return(0);
 }
 
@@ -207,13 +207,13 @@ int vrp_test(sym_environment *env, int argc, char **argv)
 						   "B/B-n56-k7",
 						   "B/B-n64-k9",
 						   "A/A-n48-k7",
-						   "A/A-n53-k7"};   
+						   "A/A-n53-k7"};
 
    double sol[34] = {778, 784, 661, 247, 375, 569, 534, 835, 40002, 521, 742,
 		     799, 669, 730, 822, 831, 944, 914, 672, 788, 955, 805,
 		     549, 829, 742, 909, 751, 741, 1032, 747, 707, 861,
 		     1073, 1010};
-   
+
    char *input_dir = (char*)malloc(CSIZE*(MAX_FILE_NAME_LENGTH+1));
    char *infile = (char*)malloc(CSIZE*(MAX_FILE_NAME_LENGTH+1));
    char *sgfile = (char*)malloc(CSIZE*(MAX_FILE_NAME_LENGTH+1));
@@ -222,14 +222,14 @@ int vrp_test(sym_environment *env, int argc, char **argv)
 
    vrp_problem *vrp = (vrp_problem *) env->user;
 
-   if (strcmp(vrp->par.test_dir, "") == 0){ 
+   if (strcmp(vrp->par.test_dir, "") == 0){
      strcpy(input_dir, "../../../VRPLIB");
    } else{
      strcpy(input_dir, vrp->par.test_dir);
    }
 
    for(i = 0; i<file_num; i++){
-     
+
      strcpy(infile, "");
      strcpy(sgfile, "");
      sprintf(infile, "%s%s%s%s", input_dir, "/", input_files[i], ".vrp");
@@ -241,16 +241,16 @@ int vrp_test(sym_environment *env, int argc, char **argv)
      vrp->par.use_small_graph = LOAD_SMALL_GRAPH;
 
      sym_load_problem(env);
-     
+
      sym_find_initial_bounds(env);
 
-     printf("Solving %s...\n", input_files[i]); 
-        
+     printf("Solving %s...\n", input_files[i]);
+
      sym_solve(env);
-     
+
      sym_get_obj_val(env, &obj_val[i]);
-     
-     if((obj_val[i] < sol[i] + tol) && 
+
+     if((obj_val[i] < sol[i] + tol) &&
 	(obj_val[i] > sol[i] - tol)){
        printf("Success!\n");
      } else {
@@ -260,10 +260,10 @@ int vrp_test(sym_environment *env, int argc, char **argv)
      if(i+1 < file_num){
        sym_close_environment(env);
 
-       env = sym_open_environment();       
+       env = sym_open_environment();
        sym_parse_command_line(env, argc, argv);
      }
-     
+
    }
    return (0);
 }

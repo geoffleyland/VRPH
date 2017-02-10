@@ -29,7 +29,7 @@ bool TwoPointMove::search(class VRP *V, int j, int rules)
     int i,k;
     int accept_type;
 
-    if(j==VRPH_DEPOT)        
+    if(j==VRPH_DEPOT)
         return false;
 
     if(rules & VRPH_FIXED_EDGES)
@@ -39,7 +39,7 @@ bool TwoPointMove::search(class VRP *V, int j, int rules)
 
         // Make sure we aren't disturbing fixed edges
 
-        if( V->fixed[i][j] || V->fixed[j][k] ) 
+        if( V->fixed[i][j] || V->fixed[j][k] )
             return false;
     }
 
@@ -55,7 +55,7 @@ bool TwoPointMove::search(class VRP *V, int j, int rules)
     int *old_sol=NULL;
     if(rules & VRPH_TABU)
     {
-        // Remember the original solution 
+        // Remember the original solution
         old_sol=new int[V->num_original_nodes+2];
         V->export_solution_buff(old_sol);
     }
@@ -132,11 +132,11 @@ bool TwoPointMove::search(class VRP *V, int j, int rules)
     if(move(V,&BestM)==true)
     {
         if(!(rules & VRPH_TABU))
-            return true;                    
+            return true;
     }
 
     if(rules & VRPH_TABU)
-    {    
+    {
         // Check VRPH_TABU status of move - return true if its ok
         // or revert to old_sol if not and return
         if(V->check_tabu_status(&M, old_sol))
@@ -256,13 +256,13 @@ bool TwoPointMove::route_search(class VRP *V, int r1, int r2, int rules)
 bool TwoPointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 {
     ///
-    /// This function evaluates the move of swapping the positions of j 
+    /// This function evaluates the move of swapping the positions of j
     /// and b in the current solution.  If a satisfactory move is found subject
     /// to the provided rules, then the solution modification data is placed
     /// in the VRPMove M and the function returns true.  Returns false otherwise.
     ///
 
-    V->num_evaluations[TWO_POINT_MOVE_INDEX]++;    
+    V->num_evaluations[TWO_POINT_MOVE_INDEX]++;
 
     if(V->routed[j]==false || V->routed[b]==false || j==b)
         return false;
@@ -278,7 +278,7 @@ bool TwoPointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
         i=VRPH_MAX(V->pred_array[j],VRPH_DEPOT);
         k=VRPH_MAX(V->next_array[j],VRPH_DEPOT);
 
-        if( V->fixed[a][b] || V->fixed[b][c] || V->fixed[i][j] || V->fixed[j][k] ) 
+        if( V->fixed[a][b] || V->fixed[b][c] || V->fixed[i][j] || V->fixed[j][k] )
             return false;
     }
 

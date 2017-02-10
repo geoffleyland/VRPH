@@ -16,7 +16,7 @@ bool Presert::evaluate(class VRP *V, int u, int i, VRPMove *M)
 {
     ///
     /// This function evaluates the move where we
-    /// insert node u BEFORE node i in 
+    /// insert node u BEFORE node i in
     /// whatever route node i is currently in.  If the move is feasible,
     /// the relevant solution information is placed in the
     /// VRPMove M.
@@ -63,19 +63,19 @@ bool Presert::evaluate(class VRP *V, int u, int i, VRPMove *M)
     ui= V->d[u][i];
     hu= V->d[h][u];
     hi= V->d[h][i];
-    
+
     u_loss = tu+uv-tv;
     i_gain = ui+hu-hi;
 
     //savings = new - old;
     savings = (tv + hu + ui) - (tu + uv + hi);
-    
+
     start_u= V->route[u_route].start;
     start_i= V->route[i_route].start;
     end_u= V->route[u_route].end;
     end_i= V->route[i_route].end;
 
-    
+
     if(start_u==start_i)
     {
         // u and i were in the same route originally
@@ -92,22 +92,22 @@ bool Presert::evaluate(class VRP *V, int u, int i, VRPMove *M)
     {
         // Different routes
         i_change = i_gain;
-        demand_change = V->nodes[u].demand; 
+        demand_change = V->nodes[u].demand;
         i_length = V->route[i_route].length + i_change;
         i_load = V->route[i_route].load + demand_change;
         u_length = V->route[u_route].length - u_loss;
         u_load = V->route[u_route].load - demand_change;
     }
 
-    // Check feasibility 
+    // Check feasibility
 
-    if( (i_length > V->max_route_length) || (u_length > V->max_route_length) || 
+    if( (i_length > V->max_route_length) || (u_length > V->max_route_length) ||
         (i_load > V->max_veh_capacity) || (u_load > V->max_veh_capacity) )
     {
         return false;
     }
 
-    // else it's feasible - record the move 
+    // else it's feasible - record the move
 
 
     // Figure out if we reduce the # of routes here
@@ -168,7 +168,7 @@ bool Presert::move(VRP *V, int u, int i)
 {
 
     ///
-    /// This function inserts node number u BEFORE node i in 
+    /// This function inserts node number u BEFORE node i in
     /// whatever route node i is currently in if the move
     /// is feasible.
     ///
@@ -195,7 +195,7 @@ bool Presert::move(VRP *V, int u, int i)
 
     // Otherwise, the move is feasible, so make it
 
-    
+
     // Update the solution information
     V->update(&M);
 
@@ -213,7 +213,7 @@ bool Presert::move(VRP *V, int u, int i)
     // post_u is what used to be after u
     post_u= V->next_array[u];
 
-        
+
     // Get the start and end of the original route.
     start_i= V->route[i_route].start;
     end_i= V->route[i_route].end;
@@ -221,7 +221,7 @@ bool Presert::move(VRP *V, int u, int i)
     start_u= V->route[u_route].start;
     end_u= V->route[u_route].end;
 
-    
+
     if(start_i==i)
         // u is now before i
         new_i_start=u;
@@ -249,11 +249,11 @@ bool Presert::move(VRP *V, int u, int i)
         new_u_end=pre_u;
     else
         new_u_end=end_u;
-    
-    
-    
+
+
+
     // Special case
-    
+
     if(pre_i==-u)
     {
         // We have    1-...t-v-u-1
@@ -278,7 +278,7 @@ bool Presert::move(VRP *V, int u, int i)
         // Make sure we didn't have VRPH_DEPOT-u-VRPH_DEPOT route
         if(start_u==end_u)
             return true;//??
-        
+
 
         // Update u_route information
         V->route[u_route].end=new_u_end;
@@ -299,7 +299,7 @@ bool Presert::move(VRP *V, int u, int i)
         if(pre_i>0)    // was >=!!
             V->next_array[pre_i]=u;
         else
-            // post_i 
+            // post_i
             V->next_array[VRPH_ABS(pre_i)]=-u;
 
         // Update i_route information
@@ -307,11 +307,11 @@ bool Presert::move(VRP *V, int u, int i)
         V->route[i_route].end=new_i_end;
         V->route[i_route].start=new_i_start;
 
-        
+
         // Check for VRPH_DEPOT-u-VRPH_DEPOT route
         if(start_u==end_u)
             return true;
-        
+
 
         // start_u is now next[u] since u used to be at the start
         start_u= V->next_array[u];
@@ -330,7 +330,7 @@ bool Presert::move(VRP *V, int u, int i)
     V->pred_array[u]=pre_i;
     // We now need to make u's old predecessor pre_u point to post_u since
     // u is no longer there
-    
+
     // If u was the first node in its route, then post_u is now the first node
     // in the route
     if(pre_u<=0 || post_u<=0)
@@ -346,12 +346,12 @@ bool Presert::move(VRP *V, int u, int i)
     }
     // The element who used to be after u is now preceded by the element
     // that was before u
-    
-    // The element who used to be after i is now preceded by u 
+
+    // The element who used to be after i is now preceded by u
     if(pre_i>0)// was >=!!
         V->next_array[pre_i]=u;
     else
-        // post_i 
+        // post_i
         V->next_array[VRPH_ABS(pre_i)]=-u;
 
     // Update i_route information
@@ -362,7 +362,7 @@ bool Presert::move(VRP *V, int u, int i)
     // Check for VRPH_DEPOT-u-VRPH_DEPOT route
     if(start_u==end_u)
         return true;
-    
+
 
     // Update u_route information
     if(u==start_u)
@@ -380,10 +380,10 @@ bool Presert::move(VRP *V, int u, int i)
         new_u_end=new_i_end;
         new_u_start=new_i_start;
     }
-    
+
     V->route[u_route].end=new_u_end;
     V->route[u_route].start=new_u_start;
-    
+
     return true;
 
 }

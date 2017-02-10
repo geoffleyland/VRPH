@@ -15,7 +15,7 @@ bool MoveString::evaluate(VRP *V, int a, int b, int u, int v, VRPMove *M)
 {
     ///
     /// Evaluates the move of taking the string between u and v (i.e. t-u-j-k-l-m-v-w)
-    /// and inserting between a and b (assumed to currently be an existing edge), 
+    /// and inserting between a and b (assumed to currently be an existing edge),
     /// yielding t-w & a-u-j-k-l-m-b
     ///
 
@@ -31,7 +31,7 @@ bool MoveString::evaluate(VRP *V, int a, int b, int u, int v, VRPMove *M)
     int t,w;
 
     t=VRPH_MAX(V->pred_array[u],0);
-    w=VRPH_MAX(V->next_array[v],0);    
+    w=VRPH_MAX(V->next_array[v],0);
 
     int a_route, u_route;
 
@@ -111,7 +111,7 @@ bool MoveString::evaluate(VRP *V, int a, int b, int u, int v, VRPMove *M)
 # if STRING_DEBUG>1
             printf("STRING::a_len too long: %f\n",new_a_len);
 #endif
-            // Exceeds length 
+            // Exceeds length
             return false;
         }
 
@@ -121,7 +121,7 @@ bool MoveString::evaluate(VRP *V, int a, int b, int u, int v, VRPMove *M)
 #            if(STRING_DEBUG>1)
             printf("STRING::u_len too long: %f\n",new_u_len);
 #endif
-            // Exceeds length 
+            // Exceeds length
             return false;
         }
 
@@ -193,7 +193,7 @@ bool MoveString::move(VRP *V, int a, int b, int u, int v)
 
     if(a!=VRPH_DEPOT)
     {
-        // We can do this via a sequence of postserts    
+        // We can do this via a sequence of postserts
         Postsert postsert;
 
         int string[100];
@@ -225,7 +225,7 @@ bool MoveString::move(VRP *V, int a, int b, int u, int v)
 
         postsert.move(V,string[0],a);
         for(i=1;i<len;i++)
-        {    
+        {
             postsert.move(V,string[i],string[i-1]);
         }
 

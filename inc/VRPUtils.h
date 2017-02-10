@@ -96,7 +96,7 @@ public:
 
 struct VRPSegment
 {
-	/// 
+	///
 	/// Contains information about a particular segment of
 	/// a route.
 	///

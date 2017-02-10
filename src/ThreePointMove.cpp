@@ -16,7 +16,7 @@ bool ThreePointMove::search(VRP *V, int b, int rules)
 {
     ///
     /// Searches for ThreePointMoves involving node b.  In this
-    /// move, the position of node b is exchanged with two other 
+    /// move, the position of node b is exchanged with two other
     /// nodes in an existing edge.
     ///
 
@@ -25,8 +25,8 @@ bool ThreePointMove::search(VRP *V, int b, int rules)
     BestM.savings=VRP_INFINITY;
     int h,i,ii,j;
     int accept_type;
-    
-    if(b==VRPH_DEPOT)        
+
+    if(b==VRPH_DEPOT)
         return false;
 
     if(rules & VRPH_FIXED_EDGES)
@@ -36,7 +36,7 @@ bool ThreePointMove::search(VRP *V, int b, int rules)
 
         // Make sure we aren't disturbing fixed edges
 
-        if( V->fixed[i][b] || V->fixed[b][j] ) 
+        if( V->fixed[i][b] || V->fixed[b][j] )
             return false;
     }
 
@@ -56,11 +56,11 @@ bool ThreePointMove::search(VRP *V, int b, int rules)
     int *old_sol=NULL;
     if(rules & VRPH_TABU)
     {
-        // Remember the original solution 
+        // Remember the original solution
         old_sol=new int[V->num_original_nodes+2];
         V->export_solution_buff(old_sol);
     }
-        
+
     for(ii=0;ii<V->search_size;ii++)
     {
         // Get the edge i-j
@@ -75,7 +75,7 @@ bool ThreePointMove::search(VRP *V, int b, int rules)
 
             if(evaluate(V,b,i,j,rules,&M)==true)
             {
-                
+
                 if((accept_type==VRPH_FIRST_ACCEPT) || ((accept_type==VRPH_LI_ACCEPT)&&M.savings<=-VRPH_EPSILON))
                 {
                     // Make the move
@@ -150,7 +150,7 @@ bool ThreePointMove::search(VRP *V, int b, int rules)
         if(rules&VRPH_TABU)
             delete [] old_sol;
         return false;        // No moves found
-    }    
+    }
 
     if(accept_type==VRPH_BEST_ACCEPT || accept_type==VRPH_LI_ACCEPT)
     {
@@ -193,7 +193,7 @@ bool ThreePointMove::route_search(VRP *V, int r1, int r2, int rules)
     VRPMove BestM;
     int j,k,l,m;
     int accept_type;
-    
+
     BestM.savings=VRP_INFINITY;
 
     if(r1==r2)
@@ -337,7 +337,7 @@ bool ThreePointMove::evaluate(VRP *V, int b, int i, int j, int rules, VRPMove *M
 
     // Don't do it if tiny routes
     if(V->route[a_route].num_customers<=1 || V->route[i_route].num_customers<=2)
-        return false;    
+        return false;
 
     a=VRPH_MAX(V->pred_array[b],0);
     c=VRPH_MAX(V->next_array[b],0);
@@ -347,10 +347,10 @@ bool ThreePointMove::evaluate(VRP *V, int b, int i, int j, int rules, VRPMove *M
     if(rules & VRPH_FIXED_EDGES)
     {
         // Make sure we aren't disturbing fixed edges
-        if( V->fixed[a][b] || V->fixed[b][c] ) 
+        if( V->fixed[a][b] || V->fixed[b][c] )
             return false;
 
-        if( V->fixed[h][i] || V->fixed[j][k] ) 
+        if( V->fixed[h][i] || V->fixed[j][k] )
             return false;
 
     }
@@ -360,14 +360,14 @@ bool ThreePointMove::evaluate(VRP *V, int b, int i, int j, int rules, VRPMove *M
     if(b==h)
     {
         // a-b/h-c/i-j-k --> a-c/i-j-b/h-k - postsert(b,j)
-        savings = (V->d[a][i]+V->d[j][b]+V->d[b][k]) - 
+        savings = (V->d[a][i]+V->d[j][b]+V->d[b][k]) -
             (V->d[a][b]+V->d[b][c]+V->d[j][k]);
     }
-    
+
     if(b==k)
     {
         // h-i-j/a-b/k-c --> h-b/k-i-j/a-c - presert(b,i)
-        savings = (V->d[h][b]+V->d[b][i]+V->d[j][c]) - 
+        savings = (V->d[h][b]+V->d[b][i]+V->d[j][c]) -
             (V->d[h][i]+V->d[a][b]+V->d[b][c]);
 
     }
@@ -381,7 +381,7 @@ bool ThreePointMove::evaluate(VRP *V, int b, int i, int j, int rules, VRPMove *M
 
         // No conflicts
         // savings = new - old
-        savings = (V->d[a][i]+V->d[j][c]+V->d[h][b]+V->d[b][k]) - 
+        savings = (V->d[a][i]+V->d[j][c]+V->d[h][b]+V->d[b][k]) -
             (V->d[a][b]+V->d[b][c]+V->d[h][i]+V->d[j][k]);
 
     }
@@ -395,7 +395,7 @@ bool ThreePointMove::evaluate(VRP *V, int b, int i, int j, int rules, VRPMove *M
         // Same route - check length feasibility
         if(V->route[a_route].length+savings>V->max_route_length)
             return false;
-        
+
         // Otherwise the move is feasible - record the move...
 
         M->num_arguments=3;
@@ -410,7 +410,7 @@ bool ThreePointMove::evaluate(VRP *V, int b, int i, int j, int rules, VRPMove *M
         M->route_custs[0]=V->route[a_route].num_customers;
         M->route_loads[0]=V->route[a_route].load;
         M->savings=savings;
-        M->total_number_of_routes=V->total_number_of_routes;        
+        M->total_number_of_routes=V->total_number_of_routes;
         // Now check the move
         if(V->check_move(M,rules)==true)
             return true;
@@ -451,7 +451,7 @@ bool ThreePointMove::evaluate(VRP *V, int b, int i, int j, int rules, VRPMove *M
     M->route_loads[0]=new_a_load;
     M->route_loads[1]=new_i_load;
     M->savings=savings;
-    M->total_number_of_routes=V->total_number_of_routes;        
+    M->total_number_of_routes=V->total_number_of_routes;
 
 
     // Now check the move
@@ -508,7 +508,7 @@ bool ThreePointMove::move(VRP *V, VRPMove *M)
         V->max_veh_capacity=orig_veh_cap;
         V->verify_routes("After ThreePM b==h");
     }
-    
+
     if(b==k)
     {
         // h-i-j/a-b/k-c --> h-b/k-i-j/a-c - presert(b,i)

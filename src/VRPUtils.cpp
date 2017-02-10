@@ -19,7 +19,7 @@ double VRPDistance(int type, double x1, double y1, double x2, double y2)
 	///
 
 	// This variation handles 2D cases
-	// Type refers to the type of distance function used in the 
+	// Type refers to the type of distance function used in the
 	// problem instance.
 
 	double xd, yd;
@@ -167,7 +167,7 @@ int VRPSavingsCompare (const void *a, const void *b)
 
 int VRPNeighborCompare (const void *a, const void *b)
 {
-	/// 
+	///
 	/// Compares two VRPNeighborElements using the val field.
 	///
 

@@ -22,7 +22,7 @@ ClarkeWright::ClarkeWright(int n)
 
     s=new VRPSavingsElement[n*(n-1)/2];
     has_savings_matrix = false;
-    // Set this to true once we have the matrix    
+    // Set this to true once we have the matrix
 
 }
 
@@ -36,13 +36,13 @@ void ClarkeWright::CreateSavingsMatrix(class VRP *V, double lambda, bool use_nei
 {
     ///
     /// This computes the savings matrix d[0,i]+d[0,j]-lambda*d[i,j]
-    /// for all pairs (i,j) with i and j routed.  
+    /// for all pairs (i,j) with i and j routed.
     /// Matrix is sorted and each element is of the form [val, i, j]
     ///
 
     int i,j,k,m,n;
 
-    n = V->num_original_nodes;    // n is the max. # of non-VRPH_DEPOT nodes    
+    n = V->num_original_nodes;    // n is the max. # of non-VRPH_DEPOT nodes
 
 
     if(!use_neighbor_list)
@@ -75,7 +75,7 @@ void ClarkeWright::CreateSavingsMatrix(class VRP *V, double lambda, bool use_nei
         savings_matrix_size = k;
     }
     else
-    {    
+    {
         // Use the neighbor_lists
         k=0;
         for(i=1;i<=n;i++)
@@ -122,7 +122,7 @@ void ClarkeWright::CreateSavingsMatrix(class VRP *V, double lambda, bool use_nei
 bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
 {
     ///
-    /// This function constructs the routes via the 
+    /// This function constructs the routes via the
     /// Clarke Wright savings algorithm with the parameter
     /// lambda (see Yellow 19??): s_{ij}=d_{i0}+d_{0j}-lambda*d_{ij}.
     ///
@@ -131,7 +131,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
     int i,j,k,m,n,x;
     int num_routes;
     unsigned char *status;
-    double savings;    
+    double savings;
     int i_route, j_route;
 
     Postsert postsert;
@@ -155,7 +155,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
     {
         if(V->routed[i])
             num_routed++;
-        
+
     }
 
 #if CW_DEBUG
@@ -167,7 +167,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
         if(V->create_default_routes() == false)
         {
             report_error("%s: Default CW routes are not feasible!!\n");
-            // The default routes are not feasible!  
+            // The default routes are not feasible!
             return false;
 
         }
@@ -175,7 +175,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
 
 
     // Now start merging routes
-    // Create the savings matrix 
+    // Create the savings matrix
     CreateSavingsMatrix(V,lambda,use_neighbor_list);
 
     k= savings_matrix_size; // Size of savings matrix
@@ -187,7 +187,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
 
     for(m=0; m<k; m++)
     {
-        // The savings list is already sorted and the savings_element structure contains 
+        // The savings list is already sorted and the savings_element structure contains
         // the i and j values that we need
 
         i = s[m].i;
@@ -218,7 +218,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
 
         if(status[i]==VRPH_ADDED && status[j]==VRPH_ADDED)
             // i and j both VRPH_ADDED
-            x=3;        
+            x=3;
 
         if(status[i]==VRPH_INTERIOR || status[j]==VRPH_INTERIOR  )
             // One is interior or the VRPH_DEPOT - skip and move on
@@ -251,7 +251,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
             {
                 status[i]=VRPH_ADDED;
                 status[j]=VRPH_ADDED;
-                num_routes--;                    
+                num_routes--;
             }
             break;
 
@@ -310,13 +310,13 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
 
             break;
 
-        case 3:                
+        case 3:
             // i and j both previously added but neither VRPH_INTERIOR
-            // Here we have to merge the two routes together        
+            // Here we have to merge the two routes together
 
             // First, make sure they are not in the same route!
             if( V->route_num[i] == V->route_num[j] )
-                break;    
+                break;
 
             // Now we will rearrange the routes containing both i and j if necessary
             // so that i is the first node and j is the last node in their routes.
@@ -368,7 +368,7 @@ bool ClarkeWright::Construct(VRP *V, double lambda, bool use_neighbor_list)
                 j_route= V->route_num[j];
 
                 if(concatenate.move(V,i_route,j_route)==true)
-                {                        
+                {
                     status[i]=VRPH_INTERIOR;
                     status[j]=VRPH_INTERIOR;
                 }

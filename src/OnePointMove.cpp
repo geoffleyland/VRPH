@@ -20,7 +20,7 @@ bool OnePointMove::search(class VRP *V, int j, int rules)
     /// rules.     If acceptable move is found, the move is made and function returns
     /// true.  Returns false if no move is found.
     ///
-    
+
     VRPMove M;
     VRPMove BestM;
     M.savings=M.new_total_route_length=BestM.savings=BestM.new_total_route_length=VRP_INFINITY;
@@ -42,7 +42,7 @@ bool OnePointMove::search(class VRP *V, int j, int rules)
         if( (V->fixed[i][j]) || (V->fixed[j][k]) )
             return false;
 
-    }    
+    }
 
     // Determine acceptance type
     //default setting
@@ -56,18 +56,18 @@ bool OnePointMove::search(class VRP *V, int j, int rules)
         accept_type=VRPH_LI_ACCEPT;
 
     // Create the search_space
-    V->create_search_neighborhood(j, rules);    
+    V->create_search_neighborhood(j, rules);
 
     int *old_sol=NULL;
     if(rules & VRPH_TABU)
     {
-        // Remember the original solution 
+        // Remember the original solution
         old_sol=new int[V->num_original_nodes+2];
         V->export_solution_buff(old_sol);
     }
-        
+
     for(i=0;i<V->search_size;i++)
-    {            
+    {
         k=V->search_space[i];
         if(evaluate(V,j,k,rules,&M)==true)
         {
@@ -103,9 +103,9 @@ bool OnePointMove::search(class VRP *V, int j, int rules)
                     best_k=k;
                     BestM=M;
                 }
-            }                
+            }
         }
-    }        
+    }
 
 
     // We've considered all the possibilities now...
@@ -123,11 +123,11 @@ bool OnePointMove::search(class VRP *V, int j, int rules)
     if(move(V,&BestM)==true)
     {
         if(!(rules & VRPH_TABU))
-            return true;                    
+            return true;
     }
-    
+
     if(rules & VRPH_TABU)
-    {    
+    {
         // Check VRPH_TABU status of move - return true if its ok
         // or revert to old_sol if not and return
         if(V->check_tabu_status(&BestM, old_sol))// was &M??
@@ -141,9 +141,9 @@ bool OnePointMove::search(class VRP *V, int j, int rules)
             return false;
         }
     }
-        
+
     // Should have already returned
-    report_error("%s: move error 4\n",__FUNCTION__);    
+    report_error("%s: move error 4\n",__FUNCTION__);
 
     return false;
 }
@@ -160,7 +160,7 @@ bool OnePointMove::route_search(class VRP *V, int r1, int r2, int rules)
     if( (rules & VRPH_USE_NEIGHBOR_LIST) > 0)
         report_error("%s: route_searches do not use neighbor list\n",__FUNCTION__);
 
-    // Otherwise, we have a route search - look for all moves involving 
+    // Otherwise, we have a route search - look for all moves involving
     // route r1 and route r2
 
     VRPMove M;
@@ -180,7 +180,7 @@ bool OnePointMove::route_search(class VRP *V, int r1, int r2, int rules)
         accept_type=VRPH_BEST_ACCEPT;
     if( (rules & VRPH_LI_ACCEPT) > 0)
         accept_type=VRPH_LI_ACCEPT;
-        
+
 
     int j;
     j= V->route[r1].start;
@@ -197,12 +197,12 @@ bool OnePointMove::route_search(class VRP *V, int r1, int r2, int rules)
                 if(accept_type==VRPH_FIRST_ACCEPT)
                 {
                     // This is the first move found -- make it and return if VRPH_FIRST_ACCEPT
-                    
+
                     if(move(V,&M)==true)
                         return true;
                     else
                         report_error("%s: move is false?\n",__FUNCTION__);
-                                
+
                 }
 
                 if(accept_type==VRPH_BEST_ACCEPT)
@@ -220,7 +220,7 @@ bool OnePointMove::route_search(class VRP *V, int r1, int r2, int rules)
                 if(accept_type==VRPH_LI_ACCEPT)
                 {
                     // move if downhill, store otherwise.
-                    
+
                     if(M.savings<-VRPH_EPSILON)
                     {
                         // it's downhill, so make it.
@@ -258,9 +258,9 @@ bool OnePointMove::route_search(class VRP *V, int r1, int r2, int rules)
         return true;
     else
         report_error("%s: false 8\n",__FUNCTION__);
-    
+
     return false;
-    
+
 
 }
 
@@ -284,7 +284,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 
 
     if(rules & VRPH_FIXED_EDGES)
-    {        
+    {
         // Make sure we aren't disturbing fixed edges
 
         if( V->fixed[i][j]|| V->fixed[j][k] )
@@ -296,7 +296,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 
     M->evaluated_savings=false;
 
-    if(b==j || V->routed[j]==false || V->routed[b]==false || j==VRPH_DEPOT) 
+    if(b==j || V->routed[j]==false || V->routed[b]==false || j==VRPH_DEPOT)
         return false;
 
     if(b!=VRPH_DEPOT)
@@ -316,7 +316,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 
 
     }
-    
+
     double savings1, savings2, best_savings;
     Postsert postsert;
     Presert presert;
@@ -334,7 +334,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
         bool allowed, found_move;
         VRPMove CurrentM;
         found_move=false;
-        
+
         for(;;)
         {
             // Consider the edge VRPH_DEPOT-current_start
@@ -349,7 +349,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 
                 if( (presert.evaluate(V,j,t,&CurrentM)==true)&&(V->check_move(&CurrentM,rules)==true) && allowed )
                 {
-                    
+
                     if(CurrentM.is_better(V,M,rules))
                     {
                         found_move=true;
@@ -358,7 +358,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
                 }
             }
 
-            // Now try the t-VRPH_DEPOT edge                
+            // Now try the t-VRPH_DEPOT edge
             current_route= V->route_num[current_start];
             current_end= V->route[current_route].end;
             t=current_end;
@@ -377,7 +377,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
                         *M=CurrentM;
                     }
                 }
-                
+
             }
 
             // Now advance to the next node adjacent to the VRPH_DEPOT
@@ -388,9 +388,9 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 
         return found_move;
 
-        
+
     }
-    
+
     // Special Case
     if(c == j)
     {
@@ -403,12 +403,12 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
             if( V->fixed[a][b] )//|| V->fixed[b][c])
                 return false;
         }
-        
+
         if( (presert.evaluate(V,j,b,M)==true)&&(V->check_move(M,rules)==true) )
             return true;
         else
             return false;
-        
+
     }
 
 
@@ -420,7 +420,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
         {
             // Make sure we aren't disturbing fixed edges
 
-            if( V->fixed[b][c] )//|| V->fixed[a][b] ) 
+            if( V->fixed[b][c] )//|| V->fixed[a][b] )
                 return false;
         }
 
@@ -428,10 +428,10 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
             return true;
         else
             return false;
-        
+
     }
-    
-    // No conflicts o/w    - can insert j either before or after b 
+
+    // No conflicts o/w    - can insert j either before or after b
     // We will choose the better move always!
 
     // savings = new-old
@@ -440,7 +440,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 
     best_savings = VRPH_MIN(savings1, savings2);
 
-    
+
     if( savings1 <= savings2 &&  (presert.evaluate(V,j,b,M)==true)
         &&(V->check_move(M,rules)==true) )
     {
@@ -449,12 +449,12 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
         {
             // Make sure we aren't disturbing fixed edges
 
-            if( V->fixed[a][b] )//|| V->fixed[b][c] ) 
+            if( V->fixed[a][b] )//|| V->fixed[b][c] )
                 return false;
         }
         return true;
     }
-    
+
     // Now check savings2
     if( savings2<savings1 && postsert.evaluate(V,j,b,M)==true &&
         (V->check_move(M,rules)==true) )
@@ -464,7 +464,7 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
         {
             // Make sure we aren't disturbing fixed edges
 
-            if( V->fixed[b][c] )//|| V->fixed[a][b] ) 
+            if( V->fixed[b][c] )//|| V->fixed[a][b] )
                 return false;
         }
 
@@ -480,15 +480,15 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
         {
             // Make sure we aren't disturbing fixed edges
 
-            if( V->fixed[a][b] )//|| V->fixed[b][c]) 
+            if( V->fixed[a][b] )//|| V->fixed[b][c])
                 return false;
         }
 
         return true;
     }
-    
 
-    
+
+
     // ELSE no feasible moves found
     return false;
 }
@@ -496,10 +496,10 @@ bool OnePointMove::evaluate(class VRP *V, int j, int b, int rules, VRPMove *M)
 bool OnePointMove::move(class VRP *V, VRPMove *M)
 {
     ///
-    /// Makes the one point move determined by the VRPMove M. 
-    ///        
-    
-        
+    /// Makes the one point move determined by the VRPMove M.
+    ///
+
+
     if(M->move_type==PRESERT)
     {
         Presert presert;
@@ -530,7 +530,7 @@ bool OnePointMove::move(class VRP *V, VRPMove *M)
                 report_error("%s: postsert move is false\n",__FUNCTION__);
         }
     }
-    
+
     return false;
-    
+
 }

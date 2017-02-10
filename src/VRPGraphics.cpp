@@ -19,7 +19,7 @@ bool VRP::plot(const char *filename, int options, int orientation)
     /// Uses PLPLOT to draw the solution in a .ps file (no other formats
     /// supported).  Valid options are VRPH_BLACK_AND_WHITE, VRPH_COLOR,
     /// VRPH_BARE_BONES, AXES, VRPH_BOXED, TITLED, VRPH_NO_POINTS, VRPH_NO_DEPOT_EDGES,
-    /// VRPH_WEIGHTED.  If options==0, then the default is to 
+    /// VRPH_WEIGHTED.  If options==0, then the default is to
     /// draw a VRPH_BOXED, COLORed plot, with AXES and a TITLE.  Setting VRPH_BOXED draws
     /// a box around the plot with no axes, and setting VRPH_BARE_BONES draws no
     /// BOX or AXES.  If VRPH_NO_POINTS is set, then the nodes are not drawn on the
@@ -101,7 +101,7 @@ bool VRP::plot(const char *filename, int options, int orientation)
 
     ymin=ymin-.05*VRPH_ABS(ymax-ymin);
     ymax=ymax+.05*VRPH_ABS(ymax-ymin);
-    
+
     // Create environment
     if(options & VRPH_BOXED)
         plenv(xmin,xmax,ymin,ymax,2,-1);
@@ -121,7 +121,7 @@ bool VRP::plot(const char *filename, int options, int orientation)
         count_num_routes());
 
 
-    // Add a label 
+    // Add a label
     if(!(options & VRPH_NO_TITLE))
         pllab("", "", dest);
 
@@ -183,7 +183,7 @@ bool VRP::plot(const char *filename, int options, int orientation)
         {
             x[ctr]= nodes[current].x;
             y[ctr]= nodes[current].y;
-            ctr++;    
+            ctr++;
             current= VRPH_MAX(VRPH_DEPOT,next_array[current]);
         }
 
@@ -343,7 +343,7 @@ bool VRP::plot_route(int r, const char *filename)
     // Set to blue for axes and numbers
     plcol0(VRPH_BLUE);
 
-    
+
     // Now find the min and max coords so we can get similar plots
     // for different routes
     xmin=VRP_INFINITY;
@@ -372,7 +372,7 @@ bool VRP::plot_route(int r, const char *filename)
 
 
     // Create environment
-    // Use this for axes 
+    // Use this for axes
     plenv(xmin,xmax,ymin,ymax,2,0);
 
     // Use this for bare bones
@@ -385,7 +385,7 @@ bool VRP::plot_route(int r, const char *filename)
     sprintf(dest,"Route %d (%7.2f, %d, %d)", r, route[r].length,
         route[r].load, route[r].num_customers);
 
-    // Add a label 
+    // Add a label
     pllab("", "", dest);
 
 
@@ -393,7 +393,7 @@ bool VRP::plot_route(int r, const char *filename)
     plwid (0);
 
     // Draw the route in red
-    plcol0(VRPH_RED);    
+    plcol0(VRPH_RED);
 
     ctr=0;
     x[ctr]= nodes[0].x;
@@ -405,7 +405,7 @@ bool VRP::plot_route(int r, const char *filename)
     {
         x[ctr]= nodes[current].x;
         y[ctr]= nodes[current].y;
-        ctr++;    
+        ctr++;
         current= VRPH_MAX(VRPH_DEPOT,next_array[current]);
     }
 

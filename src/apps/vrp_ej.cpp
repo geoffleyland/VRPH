@@ -18,7 +18,7 @@
 int main(int argc, char *argv[])
 {
     ///
-    /// A main() routine to test the procedures and performance of 
+    /// A main() routine to test the procedures and performance of
     /// various routines for ejecting and injecting groups of nodes
     /// using two strategies.
     ///
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     bool verbose=false;
 
     if(argc < 7 || (strncmp(argv[1],"-help",5)==0 || strcmp(argv[1],"-h")==0 || strcmp(argv[1],"--h")==0))
-    {        
+    {
         fprintf(stderr,"Usage: %s -f vrp_file -j num_ejected -t num_trials -m method [-s sol_file -out out_file -n num_heur_sols -v]\n",argv[0]);
         fprintf(stderr,
             "\t num_ejected should be something less than 20 or so\n"
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
         if(strcmp(argv[i],"-f")==0)
         {
             strcpy(infile,argv[i+1]);
-            has_filename=true;            
+            has_filename=true;
         }
     }
 
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 
 
     // Load the problem data
-    V.read_TSPLIB_file(infile);    
+    V.read_TSPLIB_file(infile);
     ClarkeWright CW(n);
     double heur1;
     double best_heur_sol=VRP_INFINITY;
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
         heur_sols[i]=V.get_total_route_length()-V.get_total_service_time();
         if(verbose)
             printf("RTR solution %d: %f\n",i,V.get_total_route_length()-V.get_total_service_time());
-        
+
         // Record the value of the first solution
         if(i==0)
             heur1=V.get_total_route_length()-V.get_total_service_time();
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
             if(method==RANDOM)
             {
                 // Inject them again using a random order and cheapest insertion
-                V.inject_set(num_ejected, ejected_buff,VRPH_RANDOM_SEARCH, 50);        
+                V.inject_set(num_ejected, ejected_buff,VRPH_RANDOM_SEARCH, 50);
                 double random_obj=V.get_total_route_length();
                 if(random_obj<orig_obj)
                 {
@@ -206,12 +206,12 @@ int main(int argc, char *argv[])
                     orig_obj=random_obj;
                     num_improvements++;
                 }
-            }    
+            }
         }
         // end j loop
         stop=clock();
         ej_time+=(double)(stop-start)/CLOCKS_PER_SEC;
-        
+
         // Import the best solution we found
         V.import_solution_buff(ej_solbuff);
         if(V.get_total_route_length()-V.get_total_service_time()<best_final_sol)

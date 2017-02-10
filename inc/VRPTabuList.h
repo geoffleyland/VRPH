@@ -20,7 +20,7 @@ class VRPTabuList
 public:
 	VRPTabuList();
 	VRPTabuList(int t);
-	
+
 	// Destructor
 	~VRPTabuList();
 

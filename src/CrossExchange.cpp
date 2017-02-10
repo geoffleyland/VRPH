@@ -17,7 +17,7 @@ bool CrossExchange::route_search(class VRP *V, int r1, int r2, int rules)
 {
     ///
     /// Attempts to find a cross exchange move between routes r1 and r2.
-    /// Edges i1-i2 and k1-k2 in route r1, 
+    /// Edges i1-i2 and k1-k2 in route r1,
     /// and edges j1-j2 and l1-l2 in route r2.
     ///
 
@@ -58,7 +58,7 @@ bool CrossExchange::route_search(class VRP *V, int r1, int r2, int rules)
     int *old_sol=NULL;
     if(rules & VRPH_TABU)
     {
-        // Remember the original solution 
+        // Remember the original solution
         old_sol=new int[V->num_original_nodes+2];
         V->export_solution_buff(old_sol);
     }
@@ -97,7 +97,7 @@ bool CrossExchange::route_search(class VRP *V, int r1, int r2, int rules)
 
             // Now find edges in the second route
 
-            j1 = start_2; 
+            j1 = start_2;
             j2 = V->next_array[j1];
 
             while(j2 != end_j)
@@ -199,7 +199,7 @@ bool CrossExchange::route_search(class VRP *V, int r1, int r2, int rules)
         if(rules&VRPH_TABU)
             delete [] old_sol;
         return false;        // No moves found
-    }    
+    }
 
     if(accept_type==VRPH_BEST_ACCEPT || accept_type==VRPH_LI_ACCEPT)
     {
@@ -239,7 +239,7 @@ bool CrossExchange::evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j
                              int rules, VRPMove *M)
 {
     ///
-    /// Evaluate the move of removing the edges i1-i2 and k1-k2 in one route and j1-j2 and l1-l2 in 
+    /// Evaluate the move of removing the edges i1-i2 and k1-k2 in one route and j1-j2 and l1-l2 in
     /// another route and replacing these edges with i1-j2, j1-i2, k1-l2, and l1-k2
     ///
 
@@ -258,7 +258,7 @@ bool CrossExchange::evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j
 
     // savings = new - old
 
-    M->savings = savings = (V->d[i1][j2]+V->d[j1][i2]+V->d[k1][l2]+V->d[l1][k2]) - 
+    M->savings = savings = (V->d[i1][j2]+V->d[j1][i2]+V->d[k1][l2]+V->d[l1][k2]) -
         (V->d[i1][i2]+V->d[j1][j2]+V->d[k1][k2]+V->d[l1][l2]);
 
     // Check the savings now
@@ -267,7 +267,7 @@ bool CrossExchange::evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j
 
 
     // else the move has potential -- now check feasibility
-    // Assume that edge i1-i2 is before k1-k2 in one route and that j1-j2 is before l1-l2 
+    // Assume that edge i1-i2 is before k1-k2 in one route and that j1-j2 is before l1-l2
     // in the second route - this is not checked!!
 
 
@@ -291,7 +291,7 @@ bool CrossExchange::evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j
 
     // savings = new_i_len + new_i_len - (old_i_len + old_j_len)
 
-    //new_i_len=    route distance to (i1) + d(i1,j2)+ route distance between j2 and l1 
+    //new_i_len=    route distance to (i1) + d(i1,j2)+ route distance between j2 and l1
     //                + d(l1,k2) + route distance from (k2) to depot at end of route
 
     //new_j_len=    route distance to (j1) + d(j1,i2) + route distance between i2 and k1
@@ -327,7 +327,7 @@ bool CrossExchange::evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j
     if(new_j_load > V->max_veh_capacity)
         return false;
 
-    // The move is feasible - check the rules    
+    // The move is feasible - check the rules
 
     M->savings=savings;
 
@@ -341,7 +341,7 @@ bool CrossExchange::evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j
     M->route_custs[0]= S_0_i1.num_custs + S_j2_l1.num_custs +  S_k2_0.num_custs;
 
 #if CROSS_EXCHANGE_DEBUG > 1
-    printf("%d + %d + %d = %d\n",S_0_i1.num_custs, S_j2_l1.num_custs,  S_k2_0.num_custs, 
+    printf("%d + %d + %d = %d\n",S_0_i1.num_custs, S_j2_l1.num_custs,  S_k2_0.num_custs,
         M->route_custs[0]);
 #endif
     M->route_custs[1]= V->route[i_route].num_customers + V->route[j_route].num_customers-
@@ -375,7 +375,7 @@ bool CrossExchange::evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j
 bool CrossExchange::move(class VRP *V, VRPMove *M)
 {
     ///
-    /// Make the move of removing the edges i1-i2 and k1-k2 in one route and j1-j2 and l1-l2 in 
+    /// Make the move of removing the edges i1-i2 and k1-k2 in one route and j1-j2 and l1-l2 in
     /// another route and replacing these edges with i1-j2, j1-i2, k1-l2, and l1-k2.  See
     ///
 
@@ -412,7 +412,7 @@ bool CrossExchange::move(class VRP *V, VRPMove *M)
 
     while(current_node!=VRPH_DEPOT)
     {
-        V->route[M->route_nums[0]].end=current_node;        
+        V->route[M->route_nums[0]].end=current_node;
         V->route_num[current_node] = M->route_nums[0];
         current_node= VRPH_MAX(VRPH_DEPOT,V->next_array[current_node]);
     }
@@ -421,7 +421,7 @@ bool CrossExchange::move(class VRP *V, VRPMove *M)
 
     while(current_node!=VRPH_DEPOT)
     {
-        V->route[M->route_nums[1]].end=current_node;        
+        V->route[M->route_nums[1]].end=current_node;
         V->route_num[current_node] = M->route_nums[1];
         current_node= VRPH_MAX(VRPH_DEPOT, V->next_array[current_node]);
     }

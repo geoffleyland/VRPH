@@ -30,7 +30,7 @@
 // selected variables to 0 (GLPK column deletion routine seems buggy?)
 // CPLEX and other solvers can handle a couple thousand columns w/o difficulty
 int max_columns;
-int num_cols_to_delete; 
+int num_cols_to_delete;
 // Global variable to control output
 bool verbose;
 time_t heur_time, mip_time;
@@ -41,7 +41,7 @@ void OSI_recover_route(int id, int **orderings, VRPRoute *r)
     /// Populates the route r with the information from orderings[i]. Computes
     /// the number of customers and the hash values of the route.
     ///
-    
+
     // Now get the ordering using this id
     int i=0;
     r->num_customers=0;
@@ -53,12 +53,12 @@ void OSI_recover_route(int id, int **orderings, VRPRoute *r)
     }
 
     // We now have the # of customers in the route and the ordering
-    // Compute the two hash values 
+    // Compute the two hash values
     r->hash_val=r->hash(SALT_1);
     r->hash_val2=r->hash(SALT_2);
 
     return;
-  
+
 }
 
 void OSI_recover_solution(OsiSolverInterface *si, int **orderings, int *sol_buff)
@@ -68,7 +68,7 @@ void OSI_recover_solution(OsiSolverInterface *si, int **orderings, int *sol_buff
     /// and places it in sol_buff[].  We need to access the column/variable
     /// names since these hold the orderings of the routes.
     ///
- 
+
     int i, j, k, id, nnodes, ncols;
     const double *x;
     std::string colname;
@@ -90,7 +90,7 @@ void OSI_recover_solution(OsiSolverInterface *si, int **orderings, int *sol_buff
             id=atoi(colname.c_str());
 
             OSI_recover_route(id,orderings,&route);
-        
+
             for(j=0;j<route.num_customers;j++)
                 sol_buff[k+j]=route.ordering[j];
 
@@ -102,7 +102,7 @@ void OSI_recover_solution(OsiSolverInterface *si, int **orderings, int *sol_buff
     sol_buff[nnodes+1]=0;
 
     return;
-  
+
 }
 
 void OSI_add_route(OsiSolverInterface *si, VRP *V, VRPRoute *r, int id, int **orderings)
@@ -113,10 +113,10 @@ void OSI_add_route(OsiSolverInterface *si, VRP *V, VRPRoute *r, int id, int **or
     ///
 
     if(id>MAX_ROUTES)
-    {   
+    {
         fprintf(stderr,"Too many routes added! Increase value of MAX_ROUTES=%d\n",MAX_ROUTES);
         exit(-1);
-    }   
+    }
 
     int i, j, k, nvars, ncols;
     int *cols_to_delete;
@@ -153,16 +153,16 @@ void OSI_add_route(OsiSolverInterface *si, VRP *V, VRPRoute *r, int id, int **or
         start=clock();
         si->branchAndBound();
         stop=clock();
-        mip_time += (stop-start); 
+        mip_time += (stop-start);
         const double *y=si->getColSolution();
-        // Select a set of num_cols_to_delete columns to delete   
+        // Select a set of num_cols_to_delete columns to delete
         int nn=si->getNumCols();
         cols_to_delete = new int[nn];
         col_indices= new int[num_cols_to_delete];
         memset(cols_to_delete,0,nn*sizeof(int));
         memset(col_indices,0,num_cols_to_delete*sizeof(int));
         U=si->getColUpper();
-        
+
         if(verbose)
             printf("Finding %d columns to delete \n",num_cols_to_delete);
         k=0;
@@ -171,7 +171,7 @@ void OSI_add_route(OsiSolverInterface *si, VRP *V, VRPRoute *r, int id, int **or
             while(true)
             {
                 j=(int)floor(lcgrand(10)*nn);
-                // Make sure the variable/column is not in the optimal solution 
+                // Make sure the variable/column is not in the optimal solution
                 // Since OSI/GLPK implementation of deleteCols doesn't seem right,
                 // Need to make sure that this column isn't already fixed!
                 if(y[j]<0.01 && cols_to_delete[j]==0 && U[j]==1)
@@ -181,31 +181,31 @@ void OSI_add_route(OsiSolverInterface *si, VRP *V, VRPRoute *r, int id, int **or
                     k++;
                     break;
                 }
-            }    
+            }
         }
-        
+
         // Delete the columns - this does not seem to work in GLPK - just fix the variable to 0
         // si->deleteCols(num_cols_to_delete,col_indices);
-        
+
         for(k=0;k<num_cols_to_delete;k++)
         {
             col_name=si->getColName(col_indices[k],VRP_INFINITY);
             // Remove the route from VRPH's "Route Warehouse"
             int route_id=atoi(col_name.c_str());
             OSI_recover_route(route_id,orderings, &removed_route);
-            
+
             V->route_wh->remove_route(removed_route.hash_val, removed_route.hash_val2);
             // Fix this variable/column to 0
             si->setColBounds(col_indices[k],0,0);
         }
         if(verbose)
             printf("Deleted/Fixed %d columns/variables\n",num_cols_to_delete);
-    
+
         delete [] cols_to_delete;
         delete [] col_indices;
     }
 
-    // Add the named column to the IP 
+    // Add the named column to the IP
     sprintf(r->name,"%d",id);
     std::string new_name(r->name);
     si->addCol(col,0,1,r->length-r->total_service_time,new_name);
@@ -238,7 +238,7 @@ int main(int argc, char **argv)
     int *orderings[MAX_ROUTES];
     for(i=0;i<MAX_ROUTES;i++)
         orderings[i]=NULL;
-    
+
 
     // Set timing counters to 0
     heur_time=mip_time=0;
@@ -307,7 +307,7 @@ int main(int argc, char **argv)
     V.read_TSPLIB_file(in_file);
     // Set up a "route warehouse" to store the routes to be added to the IP
     V.route_wh=new VRPRouteWarehouse(HASH_TABLE_SIZE);
-  
+
     // Set up a minimization problem
     si->setObjSense(1);
     // Set to error only output
@@ -316,7 +316,7 @@ int main(int argc, char **argv)
 
     for(i=0;i<num_attempts;i++)
     {
-        if(i==0 || !bootstrap) 
+        if(i==0 || !bootstrap)
         {
             lambda=.5+1.5*lcgrand(0);
             // Start with a clean VRP object
@@ -328,7 +328,7 @@ int main(int argc, char **argv)
         else
             // Use the solution from the IP
             V.import_solution_buff(IP_sol_buff);
-        
+
         // Run VRPH's RTR algorithm to improve the solution
         start=clock();
         V.RTR_solve(ONE_POINT_MOVE | TWO_POINT_MOVE | TWO_OPT | VRPH_USE_NEIGHBOR_LIST,
@@ -338,16 +338,16 @@ int main(int argc, char **argv)
 
         if(verbose)
             printf("RTR Metaheuristic found solution %5.3f\n",V.get_total_route_length()-V.get_total_service_time());
-        
+
         // The RTR algorithm keeps a "warehouse" of the best solutions discovered during
         // the algorithm's search
         // Now go through the solutions in the solution warehouse and add the new routes
         // discovered to the IP
         for(j=0;j<V.solution_wh->num_sols;j++)
         {
-            // Import solution j from the warehouse 
+            // Import solution j from the warehouse
             V.import_solution_buff(V.solution_wh->sols[j].sol);
-                
+
             if(V.get_total_route_length()-V.get_total_service_time() < best_heur_sol)
                 best_heur_sol = V.get_total_route_length()-V.get_total_service_time() ;
 
@@ -380,7 +380,7 @@ int main(int argc, char **argv)
                     route_id++;
                 }
             }
-            
+
             // Set the row RHS's if we need to
             if(first_sol)
             {
@@ -413,14 +413,14 @@ int main(int argc, char **argv)
         if(verbose)
             printf("Optimal solution (%d columns) is %f\n",last_num_cols,opt);
 
-        
+
         // Now recover the solution from the IP solution
         OSI_recover_solution(si, orderings, IP_sol_buff);
-       
+
         if(verbose)
             printf("IP solution has obj. function value: %5.2f\n"
             "Best heuristic  obj. function value: %5.2f\n",
-            si->getObjValue(),best_heur_sol);     
+            si->getObjValue(),best_heur_sol);
     }
 
     if(verbose)
@@ -447,7 +447,7 @@ int main(int argc, char **argv)
         if(orderings[i])
             delete [] orderings[i];
 
-     
+
     return 0;
 }
 

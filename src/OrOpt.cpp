@@ -16,7 +16,7 @@
 bool OrOpt::search(class VRP *V, int a, int len, int rules)
 {
     ///
-    /// Looks for string insertions of length len beginning at a that 
+    /// Looks for string insertions of length len beginning at a that
     /// meet the provided rules.  Makes move if one is found.
     ///
 
@@ -26,7 +26,7 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
     int i,b,c,d;
     int string_end;
     int str[10];
-        
+
     int accept_type;
 
     //default setting
@@ -38,7 +38,7 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
         accept_type=VRPH_BEST_ACCEPT;
     if( (rules & VRPH_LI_ACCEPT) > 0)
         accept_type=VRPH_LI_ACCEPT;
-    
+
     string_end = V->get_string_end(a,len);
 
     if(string_end==-1)
@@ -52,7 +52,7 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
         // Make sure we aren't disturbing fixed edges
         i=VRPH_MAX(V->pred_array[a],VRPH_DEPOT);
 
-        if( V->fixed[i][a] ) 
+        if( V->fixed[i][a] )
             return false;
 
         i=VRPH_MAX(V->next_array[string_end],VRPH_DEPOT);
@@ -75,18 +75,18 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
     int *old_sol=NULL;
     if(rules & VRPH_TABU)
     {
-        // Remember the original solution 
+        // Remember the original solution
         old_sol=new int[V->num_original_nodes+2];
         V->export_solution_buff(old_sol);
     }
-        
+
     for(i=0;i<V->search_size;i++)
     {
         c=V->search_space[i];
-    
-        if(c!=VRPH_DEPOT)                
+
+        if(c!=VRPH_DEPOT)
         {
-            
+
             d=VRPH_MAX(V->next_array[c],0);
             b=VRPH_MAX(V->pred_array[c],0);
 
@@ -95,7 +95,7 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
                 flag=1;
 
             // Look for overlap
-            
+
             for(int j=0;j<len;j++)
             {
                 if(str[j]==c || str[j]==d)
@@ -128,14 +128,14 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
                                 }
                                 // else we reverted back - continue the search for a move
                             }
-                        }                        
+                        }
                     }
 
                     if(accept_type == VRPH_BEST_ACCEPT || accept_type==VRPH_LI_ACCEPT)
                     {
                         if(M.is_better(V, &BestM, rules))//if(M.savings<best_savings)
                             BestM=M;
-                            
+
                     }
 
                     if(accept_type == VRPH_LI_ACCEPT)
@@ -160,7 +160,7 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
                                     }
                                     // else we reverted back - continue the search for a move
                                 }
-                            }                        
+                            }
                         }
                         else
                         {
@@ -184,11 +184,11 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
     if(move(V,&BestM)==true)
     {
         if(!(rules & VRPH_TABU))
-            return true;                    
+            return true;
     }
-    
+
     if(rules & VRPH_TABU)
-    {    
+    {
         // Check VRPH_TABU status of move - return true if its ok
         // or revert to old_sol if not and return
         if(V->check_tabu_status(&BestM, old_sol))// was &M??
@@ -202,7 +202,7 @@ bool OrOpt::search(class VRP *V, int a, int len, int rules)
             return false;
         }
     }
-        
+
     // Should have already returned
     report_error("%s: move error\n",__FUNCTION__);
     return false;
@@ -245,11 +245,11 @@ bool OrOpt::route_search(VRP *V, int r1, int r2, int len, int rules)
             if(evaluate(V,j,len,c,d,rules, &M)==true)
             {
                 if(accept_type==VRPH_FIRST_ACCEPT || (accept_type==VRPH_LI_ACCEPT && M.savings<-VRPH_EPSILON) )
-                {    
+                {
                     // Make the move
                     if(move(V,&M)==false)
                         report_error("%s: first accept move returns false",__FUNCTION__);
-                    else    
+                    else
                         return true;
                 }
 
@@ -257,7 +257,7 @@ bool OrOpt::route_search(VRP *V, int r1, int r2, int len, int rules)
                 if(accept_type == VRPH_LI_ACCEPT || accept_type == VRPH_BEST_ACCEPT)
                 {
                     if(M.is_better(V, &BestM, rules))
-                        BestM=M;                
+                        BestM=M;
 
                 }
 
@@ -279,11 +279,11 @@ bool OrOpt::route_search(VRP *V, int r1, int r2, int len, int rules)
 
     if(accept_type==VRPH_BEST_ACCEPT || accept_type==VRPH_LI_ACCEPT)
     {
-        
+
             // Make the move
             if(move(V,&BestM)==false)
                 report_error("%s: first accept move returns false\n",__FUNCTION__);
-            else    
+            else
                 return true;
 
     }
@@ -297,7 +297,7 @@ bool OrOpt::route_search(VRP *V, int r1, int r2, int len, int rules)
 bool OrOpt::evaluate(class VRP *V, int a, int len, int c, int d, int rules, VRPMove *M)
 {
     ///
-    /// Evaluates the move of taking the string of length len beginning at a and 
+    /// Evaluates the move of taking the string of length len beginning at a and
     /// inserting it between c and d subject to the provided rules
     ///
 
@@ -308,9 +308,9 @@ bool OrOpt::evaluate(class VRP *V, int a, int len, int c, int d, int rules, VRPM
     if(rules & VRPH_FIXED_EDGES)
     {
         // Make sure we aren't disturbing fixed edges
-        if( V->fixed[c][d] ) 
+        if( V->fixed[c][d] )
             return false;
-    }    
+    }
 
     if(V->routed[a]==false || V->routed[c]==false  ||
         V->routed[d]==false )
@@ -324,11 +324,11 @@ bool OrOpt::evaluate(class VRP *V, int a, int len, int c, int d, int rules, VRPM
     // First make sure the edge c-d exists
     if(c!=VRPH_DEPOT && VRPH_MAX(V->next_array[c],0)!=d )
         report_error("%s: c-d not an edge!\n",__FUNCTION__);
-        
+
 
     if(c==VRPH_DEPOT && VRPH_MAX(V->pred_array[d],0)!=c)
         report_error("%s: c-d not an edge!\n",__FUNCTION__);
-    
+
 
     a_route= V->route_num[a];
     if(c!=VRPH_DEPOT)
@@ -336,13 +336,13 @@ bool OrOpt::evaluate(class VRP *V, int a, int len, int c, int d, int rules, VRPM
     else
         c_route= V->route_num[d];
 
-    
+
     if( (rules & VRPH_INTER_ROUTE_ONLY) && (a_route ==c_route))
         return false;
 
     if((rules & VRPH_INTRA_ROUTE_ONLY) && a_route !=c_route)
         return false;
-    
+
     // Construct the appropriate string;
 
     int string_end = V->get_string_end(a, len);
@@ -358,25 +358,25 @@ bool OrOpt::evaluate(class VRP *V, int a, int len, int c, int d, int rules, VRPM
         z=VRPH_MAX(V->pred_array[a],VRPH_DEPOT);
         b=VRPH_MAX(V->next_array[string_end],VRPH_DEPOT);
 
-        if( V->fixed[z][a] || V->fixed[string_end][b] ) 
+        if( V->fixed[z][a] || V->fixed[string_end][b] )
             return false;
-        
-        
+
+
     }
 
     // Now just use MoveString to evaluate
 
     MoveString MS;
 
-    if(MS.evaluate(V,c,d,a,string_end, M)==true) 
+    if(MS.evaluate(V,c,d,a,string_end, M)==true)
     {
         if(V->check_move(M,rules)==true)
             return true;
         else
             return false;
-        
+
     }
-    
+
 
     return false;
 
@@ -403,7 +403,7 @@ bool OrOpt::move(class VRP *V, VRPMove *M)
     if(string_end==-1)
     {
         report_error("%s: no string end in move??\n",__FUNCTION__);
-        
+
     }
 
     MoveString MS;
@@ -411,7 +411,7 @@ bool OrOpt::move(class VRP *V, VRPMove *M)
     if(    MS.move(V,c,d,a,string_end)==false)
     {
         report_error("%s: MS.move is false!\n",__FUNCTION__);
-        
+
     }
 
     V->num_moves[OR_OPT_INDEX]++;

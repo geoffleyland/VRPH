@@ -23,7 +23,7 @@ void VRPH_version()
 
 VRP::VRP(int n)
 {
-    /// 
+    ///
     /// Constructor for an n-node problem.
     ///
 
@@ -33,7 +33,7 @@ VRP::VRP(int n)
     num_original_nodes=n;
     total_demand=0;
     num_days=0;
-    
+
     next_array = new int[n+2];
     pred_array = new int[n+2];
     route_num = new int[n+2];
@@ -42,13 +42,13 @@ VRP::VRP(int n)
     best_sol_buff = new int[n+2];
     current_sol_buff = new int[n+2];
     search_space = new int[n+2];
-    nodes = new VRPNode[n+2];    
+    nodes = new VRPNode[n+2];
     // Add an extra spot for the VRPH_DEPOT and for the dummy node
-    
+
     symmetric=true;
     // Set to false only when we encounter FULL_MATRIX file
 
-    forbid_tiny_moves=true;    
+    forbid_tiny_moves=true;
     // Default is to allow these moves
 
     d=NULL;
@@ -73,12 +73,12 @@ VRP::VRP(int n)
     orig_max_route_length=VRP_INFINITY;
     total_route_length=0.0;
     best_known=VRP_INFINITY;
-    depot_normalized=false; 
+    depot_normalized=false;
     // Will be set to true if we shift nodes so VRPH_DEPOT is at origin
-    
+
     // These are for record-to-record travel
     record = 0.0;
-    deviation = VRPH_DEFAULT_DEVIATION;        
+    deviation = VRPH_DEFAULT_DEVIATION;
 
     // For keeping track of the statistics
 
@@ -97,16 +97,16 @@ VRP::VRP(int n)
     this->tabu_list=new VRPTabuList(MAX_VRPH_TABU_LIST_SIZE);
     this->route_wh=NULL;
 
-    // Set this to true only if we have valid coordinates 
+    // Set this to true only if we have valid coordinates
     // This is valid only for plotting the solution
     can_display=false;
-    
-    
+
+
 }
 
 VRP::VRP(int n, int ndays)
 {
-    /// 
+    ///
     /// Constructor for an n-node, ndays-day problem.
     ///
 
@@ -116,7 +116,7 @@ VRP::VRP(int n, int ndays)
     num_original_nodes=n;
     total_demand=0;
     num_days=ndays;
-    
+
     next_array = new int[n+2];
     pred_array = new int[n+2];
     route_num = new int[n+2];
@@ -125,10 +125,10 @@ VRP::VRP(int n, int ndays)
     best_sol_buff = new int[n+2];
     current_sol_buff = new int[n+2];
     search_space = new int[n+2];
-    nodes = new VRPNode[n+2];    
+    nodes = new VRPNode[n+2];
     // Add an extra spot for the VRPH_DEPOT and for the dummy node
-    
-    forbid_tiny_moves=true;    
+
+    forbid_tiny_moves=true;
     // Default is to forbid these moves
 
     d=NULL;
@@ -154,12 +154,12 @@ VRP::VRP(int n, int ndays)
     total_route_length=0.0;
     best_known=VRP_INFINITY;
 
-    depot_normalized=false; 
+    depot_normalized=false;
     // Will be set to true if we shift nodes so VRPH_DEPOT is at origin
-    
+
     // These are for record-to-record travel
     record = 0.0;
-    deviation = VRPH_DEFAULT_DEVIATION;        
+    deviation = VRPH_DEFAULT_DEVIATION;
 
     // For keeping track of the statistics
 
@@ -185,10 +185,10 @@ VRP::VRP(int n, int ndays)
         this->nodes[i].daily_service_times=new double[ndays+1];
     }
 
-    // Set this to true only if we have valid coordinates 
+    // Set this to true only if we have valid coordinates
     // This is valid only for plotting the solution
     can_display=false;
-    
+
 }
 
 VRP::~VRP()
@@ -216,7 +216,7 @@ VRP::~VRP()
 }
 
 
-// Accessor functions for private data 
+// Accessor functions for private data
 int VRP::get_num_nodes()
 {
     ///
@@ -240,7 +240,7 @@ double VRP::get_total_service_time()
     ///
     /// Returns the total service time of all customers in the instance.
     ///
-    
+
     return this->total_service_time;
 }
 
@@ -262,7 +262,7 @@ double VRP::get_best_total_route_length()
     /// Returns the total route length of the best solution discovered so far.
     ///
 
-    return this->best_total_route_length;        
+    return this->best_total_route_length;
 }
 
 int VRP::get_total_number_of_routes()
@@ -295,17 +295,17 @@ int VRP::get_num_days()
 double VRP::get_best_known()
 {
     return this->best_known;
-    
+
 }
 
 int VRP::get_max_veh_capacity()
-{   
+{
     return this->max_veh_capacity;
 }
 
 double VRP::get_max_route_length()
 {
-    return this->max_route_length;     
+    return this->max_route_length;
 }
 
 void VRP::set_best_total_route_length(double val)
@@ -315,7 +315,7 @@ void VRP::set_best_total_route_length(double val)
 
 }
 bool VRP::clone(VRP *W)
-{ 
+{
     ///
     /// Copy Constructor for VRP.
     ///
@@ -362,20 +362,20 @@ bool VRP::clone(VRP *W)
     // Assume that the current_solution has been sent to W->
     W->export_solution_buff(W->current_sol_buff);
     this->import_solution_buff(W->current_sol_buff);
-    return true;    
+    return true;
 
 }
 
 
 void VRP::create_distance_matrix(int type)
-{    
+{
     ///
     /// Creates the O(n^2) size distance matrix for the
     /// provided data using the distance function referenced by type.
     /// If the type is EXPLICIT, then the entire distance matrix should
     /// be provided in the actual TSPLIB file.
     ///
-    
+
 
     int i,j,k,n;
 
@@ -407,7 +407,7 @@ void VRP::create_neighbor_lists(int nsize)
 {
     ///
     /// Creates the neighbor list of size nsize for each node
-    /// including the VRPH_DEPOT. 
+    /// including the VRPH_DEPOT.
     ///
 
     if(nsize>num_nodes )
@@ -457,7 +457,7 @@ void VRP::create_neighbor_lists(int nsize)
             maxpos=i-1;
         }
 
-    }    
+    }
 
     // Now go through the rest of the nodes.
     for(i=nsize+1;i<=n;i++)
@@ -659,7 +659,7 @@ bool VRP::check_feasibility(VRPViolation *VV)
     ///
 
     int i;
-    bool is_feasible=true; 
+    bool is_feasible=true;
     // We will set this to false if we find a violation
 
     VV->capacity_violation=-VRP_INFINITY;
@@ -692,7 +692,7 @@ bool VRP::check_feasibility(VRPViolation *VV)
 
     return is_feasible;
 
-}    
+}
 
 
 
@@ -734,7 +734,7 @@ void VRP::refresh_routes()
 
     while(route_start != 0 && i<num_nodes+1)
     {
-        // When we finally get a route beginning at 0, this is the last route 
+        // When we finally get a route beginning at 0, this is the last route
         // and there is no next route, so break out
         if(next_array[current_node]==current_node)
         {
@@ -760,7 +760,7 @@ void VRP::refresh_routes()
 
         if(next_array[current_node]>0)
         {
-            // Next node is somewhere in the middle of a route        
+            // Next node is somewhere in the middle of a route
 
             next_node = next_array[current_node];
             len+=d[current_node][next_node];
@@ -785,7 +785,7 @@ void VRP::refresh_routes()
             route[current_route].load = current_load;
 
             i++;
-            route_start = - (next_array[current_node]);    
+            route_start = - (next_array[current_node]);
             current_route = route_num[route_start];
             current_start = route[current_route].start;
             current_end = route[current_route].end;
@@ -825,7 +825,7 @@ void VRP::create_pred_array()
             pred_array[j]=i;
         else
             pred_array[-j]=-i;
-        
+
         i=VRPH_ABS(j);
         j=next_array[i];
 
@@ -834,7 +834,7 @@ void VRP::create_pred_array()
     pred_array[j]=-i;
     return;
 
-    
+
 
 
 
@@ -863,7 +863,7 @@ bool VRP::get_segment_info(int a, int b, struct VRPSegment *S)
     /// length: d(a,i)+d(i,j)+d(j,b)
     /// load:   a + i + j + b
     /// #:      4
-    /// 
+    ///
 
 
     if(a==b)
@@ -878,10 +878,10 @@ bool VRP::get_segment_info(int a, int b, struct VRPSegment *S)
 
     }
 
-    S->len=0;    
+    S->len=0;
     S->segment_start=a;
     S->segment_end=b;
-    S->num_custs=0;        
+    S->num_custs=0;
 
 
     // Check special cases
@@ -917,7 +917,7 @@ bool VRP::get_segment_info(int a, int b, struct VRPSegment *S)
     {
         next_node = VRPH_MAX(next_array[current_node],0);
         S->len+=d[current_node][next_node];
-        current_node=next_node;        
+        current_node=next_node;
         S->load+=nodes[next_node].demand;
         if(current_node!= dummy_index)
             S->num_custs += 1;
@@ -962,12 +962,12 @@ int VRP::get_string_end(int a, int len)
 void VRP::reverse_route(int i)
 {
     ///
-    /// This function reverses route number i - does no 
+    /// This function reverses route number i - does no
     /// error checking since we don't know if the routes
     /// have normalized numbers or not...
     ///
 
-    
+
     int current_node, start_node, last_node, prev_route, next_route, temp;
     int orig_start, orig_end ;
 
@@ -995,7 +995,7 @@ void VRP::reverse_route(int i)
     pred_array[current_node] = temp;
     current_node = temp;
     while( (temp = next_array[current_node]) >0)
-    {        
+    {
         next_array[current_node] = pred_array[current_node];
         pred_array[current_node] = temp;
         current_node = temp;
@@ -1028,7 +1028,7 @@ void VRP::reverse_route(int i)
         // Update length as it possibly changed!
         this->refresh_routes();
     }
-    
+
     return;
 }
 
@@ -1060,7 +1060,7 @@ bool VRP::postsert_dummy(int i)
     if(end_i==i)
         // i is last in the route
         end=dummy;
-    else 
+    else
         end=end_i;
 
     // pre_i is what used to be before i
@@ -1076,11 +1076,11 @@ bool VRP::postsert_dummy(int i)
     // u's predecessor is now i
     pred_array[dummy]=i;
 
-    // The element who used to be after i is now preceded by u 
+    // The element who used to be after i is now preceded by u
     if(post_i>=0)
         pred_array[post_i]=dummy;
     else
-        // post_i 
+        // post_i
         pred_array[-post_i]=-dummy;
 
     //start_array[dummy]=start;
@@ -1096,7 +1096,7 @@ bool VRP::postsert_dummy(int i)
 
 bool VRP::presert_dummy(int i)
 {
-    // This function inserts a dummy node BEFORE node i in 
+    // This function inserts a dummy node BEFORE node i in
     // whatever route node i is currently in
 
     int pre_i, post_i;
@@ -1133,13 +1133,13 @@ bool VRP::presert_dummy(int i)
     // dummy is now followed by i
     next_array[dummy]=i;
     pred_array[i]=dummy;
-    pred_array[dummy]=pre_i;    
+    pred_array[dummy]=pre_i;
 
     // The element who used to be after i is now preceded by dummy
     if(pre_i>0)// was >=!!
         next_array[pre_i]=dummy;
     else
-        // post_i 
+        // post_i
         next_array[VRPH_ABS(pre_i)]=-dummy;
 
     // Update i_route information
@@ -1241,7 +1241,7 @@ bool VRP::create_default_routes()
         route[i].load= nodes[i].demand;
         route[i].length= d[VRPH_DEPOT][i] + d[i][VRPH_DEPOT];
 
-        
+
         // Check capacities
         if(route[i].load > max_veh_capacity)
             is_feasible=false;
@@ -1250,7 +1250,7 @@ bool VRP::create_default_routes()
 
         route[i].num_customers=1;
 
-        routed[i]=true;    
+        routed[i]=true;
 
     }
 
@@ -1258,7 +1258,7 @@ bool VRP::create_default_routes()
     next_array[n]=VRPH_DEPOT;
 
     route_num[VRPH_DEPOT]=0;
-    
+
     // Now create the associated pred_array implied by the newly created next_array
     create_pred_array();
 
@@ -1269,14 +1269,14 @@ bool VRP::create_default_routes()
 
 
     if(is_feasible == false)
-    { 
-        // We had infeasible routes - record the violation in the Solution and 
+    {
+        // We had infeasible routes - record the violation in the Solution and
         // return false;
 
 
         for(i=1;i<=n;i++)
         {
-            routed[i]=false;    
+            routed[i]=false;
             // Set routed status to false since default routes are infeasible
 
             // Check capacities
@@ -1287,10 +1287,10 @@ bool VRP::create_default_routes()
                 printf("Default routes load violation: %d > %d\n",route[i].load,
                     max_veh_capacity);
 
-                if( (route[i].load - max_veh_capacity) > 
+                if( (route[i].load - max_veh_capacity) >
                     violation.capacity_violation)
                 {
-                    violation.capacity_violation = 
+                    violation.capacity_violation =
                         (route[i].load - max_veh_capacity);
                 }
 
@@ -1305,7 +1305,7 @@ bool VRP::create_default_routes()
                 if( (route[i].length -max_route_length ) >
                     violation.length_violation)
                 {
-                    violation.length_violation = 
+                    violation.length_violation =
                         (route[i].length -max_route_length );
                 }
 
@@ -1366,7 +1366,7 @@ bool VRP::create_default_routes(int day)
         route[i].load= nodes[i].demand;
         route[i].length= d[VRPH_DEPOT][i] + d[i][VRPH_DEPOT];
         route[i].num_customers=1;
-        routed[i]=true;    
+        routed[i]=true;
 
     }
 
@@ -1374,7 +1374,7 @@ bool VRP::create_default_routes(int day)
     next_array[n]=VRPH_DEPOT;
 
     route_num[VRPH_DEPOT]=0;
-    
+
     // Now create the associated pred_array implied by the newly created next_array
     create_pred_array();
 
@@ -1400,14 +1400,14 @@ bool VRP::create_default_routes(int day)
     }
 
     if(is_feasible == false)
-    { 
-        // We had infeasible routes - record the violation in the Solution and 
+    {
+        // We had infeasible routes - record the violation in the Solution and
         // return false;
 
 
         for(i=1;i<=n;i++)
         {
-            routed[i]=false;    
+            routed[i]=false;
             // Set routed status to false since default routes are infeasible
 
             // Check capacities
@@ -1418,10 +1418,10 @@ bool VRP::create_default_routes(int day)
                 printf("Default routes load violation: %d > %d\n",route[i].load,
                     max_veh_capacity);
 
-                if( (route[i].load - max_veh_capacity) > 
+                if( (route[i].load - max_veh_capacity) >
                     violation.capacity_violation)
                 {
-                    violation.capacity_violation = 
+                    violation.capacity_violation =
                         (route[i].load - max_veh_capacity);
                 }
 
@@ -1436,7 +1436,7 @@ bool VRP::create_default_routes(int day)
                 if( (route[i].length -max_route_length ) >
                     violation.length_violation)
                 {
-                    violation.length_violation = 
+                    violation.length_violation =
                         (route[i].length -max_route_length );
                 }
             }
@@ -1445,7 +1445,7 @@ bool VRP::create_default_routes(int day)
     }
     else
         return true;
-    
+
 }
 
 
@@ -1504,7 +1504,7 @@ bool VRP::perturb()
         post= VRPH_MAX(VRPH_DEPOT, next_array[current]);
 
         // Define s[i]= d(pre(i),i) + d(i,next(i))-d(pre(i),next(i))
-        v[i].val=((double) nodes[current].demand) / 
+        v[i].val=((double) nodes[current].demand) /
             (VRPH_EPSILON+d[pre][current]+d[current][post]-d[pre][post]);
         v[i].position=current;
         i++;
@@ -1518,7 +1518,7 @@ bool VRP::perturb()
     qsort(v,n,sizeof(VRPNeighborElement), VRPNeighborCompare);
 
     int m=(int) (VRPH_MIN(30,n/5));
-    
+
 
     // Now insert the first m nodes from the sorted list into new locations.
 
@@ -1620,7 +1620,7 @@ bool VRP::perturb()
 
 
     delete [] v;
-    return true;        
+    return true;
 }
 
 
@@ -1628,7 +1628,7 @@ bool VRP::eject_node(int j)
 {
     ///
     /// This function removes node j from the current solution and
-    /// adjusts the solution information appropriately. 
+    /// adjusts the solution information appropriately.
     ///
 
     if(j<=VRPH_DEPOT || routed[j]==false )
@@ -1647,9 +1647,9 @@ bool VRP::eject_node(int j)
 
     // k is no longer routed
     routed[k]=false;
-    
+
     // Get k's current location - between c and e
-    
+
     c= pred_array[k];
     e= next_array[k];
 
@@ -1666,7 +1666,7 @@ bool VRP::eject_node(int j)
         route[k_route].start=VRPH_ABS(e);
         next_array[VRPH_ABS(c)]=-VRPH_ABS(e);
         pred_array[VRPH_ABS(e)]=-VRPH_ABS(c);
-        
+
     }
 
     if(k_end==k && k_start!=k)
@@ -1722,10 +1722,10 @@ bool VRP::eject_node(int j)
     if(flag)
         // We removed a singleton route
         this->total_number_of_routes--;
-    
+
     route_num[k]=-1;
     normalize_route_numbers();
-    
+
     return true;
 }
 
@@ -1750,13 +1750,13 @@ bool VRP::eject_route(int r, int *route_buff)
     route_buff[cnt]=-1;
     // Terminate with a -1
 
-    
+
 
     // Now eject the nodes
     for(int i=0;i<cnt;i++)
         this->eject_node(route_buff[i]);
-    
-    
+
+
     return true;
 
 }
@@ -1790,7 +1790,7 @@ bool VRP::check_move(VRPMove *M, int rules)
     }
 
 
-    
+
 
     if( (rules & VRPH_DOWNHILL) == VRPH_DOWNHILL)
     {
@@ -1801,7 +1801,7 @@ bool VRP::check_move(VRPMove *M, int rules)
 
     }
 
-    
+
 
 
     if( rules & VRPH_RECORD_TO_RECORD )
@@ -1852,7 +1852,7 @@ bool VRP::check_move(VRPMove *M, int rules)
     report_error("%s: didn't return yet!\n",__FUNCTION__);
 
     return false;
-    
+
 
 }
 
@@ -1870,7 +1870,7 @@ bool VRP::is_feasible(VRPMove *M, int rules)
         if( (M->route_lens[i]>this->max_route_length) || (M->route_loads[i]>this->max_veh_capacity) )
             return false;
     }
-    
+
     return true;
 
 }
@@ -1886,7 +1886,7 @@ bool VRP::inject_node(int j)
 
     int edge[4];
     double costs[4];
-    this->find_cheapest_insertion(j,edge,costs,VRPH_USE_NEIGHBOR_LIST); 
+    this->find_cheapest_insertion(j,edge,costs,VRPH_USE_NEIGHBOR_LIST);
 
     this->insert_node(j,edge[0],edge[1]);
 
@@ -1895,7 +1895,7 @@ bool VRP::inject_node(int j)
 }
 
 bool VRP::insert_node(int j, int i, int k)
-{    
+{
     ///
     /// Inserts j in between nodes i and k.  Both i and k
     /// are assumed to be routed while j is not routed.
@@ -1913,7 +1913,7 @@ bool VRP::insert_node(int j, int i, int k)
 
     if(i==k && k==VRPH_DEPOT)
     {
-        
+
         int last_node=VRPH_ABS(pred_array[VRPH_DEPOT]);
         this->next_array[last_node]=-j;
         this->pred_array[j]=-last_node;
@@ -1934,12 +1934,12 @@ bool VRP::insert_node(int j, int i, int k)
         return true;
 
 
-        
+
     }
 
     if(i!=VRPH_DEPOT && k!=VRPH_DEPOT)
     {
-        
+
         // i-k is interior edge
         if(VRPH_MAX(VRPH_DEPOT,next_array[i]) != k || VRPH_MAX(VRPH_DEPOT,pred_array[k])!=i)
         {
@@ -2027,15 +2027,15 @@ void VRP::find_cheapest_insertion(int j, int *edge, double *costs, int rules)
 {
     ///
     /// Finds the cheapest insertion of node j into the current solution.
-    /// We store both the best feasible insertion as well as the best overall 
+    /// We store both the best feasible insertion as well as the best overall
     /// insertion.
     /// The value of edge[0] is the start node of the best feasible edge to be broken and edge[1]
     /// is the end node.  Similarly, edge[2] and edge[3] represent the start and end of the
-    /// best overall edge, disregarding feasibility (may be the same as edge[0] and edge[1]).  
+    /// best overall edge, disregarding feasibility (may be the same as edge[0] and edge[1]).
     /// The costs of these insertions are placed
-    /// in costs[0] and costs[1].  If rules==VRPH_USE_NEIGHBOR_LIST, then only the neighbor 
-    /// list (plus the VRPH_DEPOT to guarantee a singleton route) is searched.  If 
-    /// rules==VRPH_NO_NEW_ROUTE, then we do not allow the customer to be added in a new 
+    /// in costs[0] and costs[1].  If rules==VRPH_USE_NEIGHBOR_LIST, then only the neighbor
+    /// list (plus the VRPH_DEPOT to guarantee a singleton route) is searched.  If
+    /// rules==VRPH_NO_NEW_ROUTE, then we do not allow the customer to be added in a new
     /// singleton route.
     ///
 
@@ -2117,7 +2117,7 @@ void VRP::find_cheapest_insertion(int j, int *edge, double *costs, int rules)
                 }
 
                 if(increase<min_feasible_increase)
-                { 
+                {
                     // Check feasibility
                     new_route= route_num[i];
 
@@ -2183,7 +2183,7 @@ void VRP::find_cheapest_insertion(int j, int *edge, double *costs, int rules)
         }
 
         if(increase<min_feasible_increase)
-        { 
+        {
             // Check feasibility
             new_route= route_num[i];
 
@@ -2212,7 +2212,7 @@ void VRP::find_cheapest_insertion(int j, int *edge, double *costs, int rules)
             if(routed[i])
             {
                 h=VRPH_MAX(VRPH_DEPOT,pred_array[i]);
-                increase=d[h][j]+d[j][i]-d[h][i];            
+                increase=d[h][j]+d[j][i]-d[h][i];
 
                 if(increase<min_increase)
                 {
@@ -2222,7 +2222,7 @@ void VRP::find_cheapest_insertion(int j, int *edge, double *costs, int rules)
                 }
 
                 if(increase<min_feasible_increase)
-                { 
+                {
                     // Check feasibility
                     if(i!=VRPH_DEPOT)
                         new_route= route_num[i];
@@ -2241,7 +2241,7 @@ void VRP::find_cheapest_insertion(int j, int *edge, double *costs, int rules)
                 }
 
                 k=VRPH_MAX(VRPH_DEPOT,next_array[i]);
-                increase=d[i][j]+d[j][k]-d[i][k];    
+                increase=d[i][j]+d[j][k]-d[i][k];
 
                 if(increase<min_increase)
                 {
@@ -2251,7 +2251,7 @@ void VRP::find_cheapest_insertion(int j, int *edge, double *costs, int rules)
                 }
 
                 if(increase<min_feasible_increase)
-                { 
+                {
                     // Check feasibility
                     if(i!=VRPH_DEPOT)
                         new_route= route_num[i];
@@ -2308,7 +2308,7 @@ int VRP::inject_set(int num, int *nodelist, int rules, int attempts)
     start_sol=new int[3+(this->num_nodes)+num];
     this->export_solution_buff(start_sol);
     this->import_solution_buff(start_sol);
-    
+
     if(rules==VRPH_RANDOM_SEARCH)
     {
         // Try "attempts" different random orderings to inject the nodes
@@ -2318,7 +2318,7 @@ int VRP::inject_set(int num, int *nodelist, int rules, int attempts)
         double costs[2];
         for(i=0;i<num;i++)
             orderings[i]=i;
-        
+
         for(i=0;i<attempts;i++)
         {
             // Create a random permutation
@@ -2339,7 +2339,7 @@ int VRP::inject_set(int num, int *nodelist, int rules, int attempts)
             // Look for a new best
             // Look for a new best
             if(this->total_route_length < best_obj && VRPH_ABS(this->total_route_length-best_obj)>VRPH_EPSILON)
-            {    
+            {
                 best_index=i;
                 best_obj=this->total_route_length;
                 this->export_solution_buff(best_sol);
@@ -2355,7 +2355,7 @@ int VRP::inject_set(int num, int *nodelist, int rules, int attempts)
         {
             this->find_cheapest_insertion(nodelist[best_ordering[j]],edge,costs,VRPH_USE_NEIGHBOR_LIST);
             this->insert_node(nodelist[best_ordering[j]],edge[0],edge[1]);
-        }        
+        }
     }
 
     if(rules==VRPH_REGRET_SEARCH)
@@ -2370,7 +2370,7 @@ int VRP::inject_set(int num, int *nodelist, int rules, int attempts)
         double costs[2];
         for(i=0;i<num;i++)
             orderings[i]=i;
-        
+
         for(i=0;i<attempts;i++)
         {
             // Create a random permutation
@@ -2400,7 +2400,7 @@ int VRP::inject_set(int num, int *nodelist, int rules, int attempts)
                     else
                         report_error("%s: Couldn't escape cycle in REGRET search!\n",__FUNCTION__);
                 }
-                
+
                 // Find the cheapest way to insert the present node
                 this->find_cheapest_insertion(current_list[j],edge,costs,VRPH_USE_NEIGHBOR_LIST);
                 // Now loop over the nodes we already injected and compute their ejection costs
@@ -2437,12 +2437,12 @@ int VRP::inject_set(int num, int *nodelist, int rules, int attempts)
                     this->insert_node(current_list[j],edge[0],edge[1]);
                     current_list[j]=node_to_eject;
                     j--;
-                }        
+                }
             }
 
             // Look for a new best
             if(this->total_route_length < best_obj && VRPH_ABS(this->total_route_length-best_obj)>VRPH_EPSILON)
-            {    
+            {
                 best_index=i;
                 best_obj=this->total_route_length;
                 this->export_solution_buff(best_sol);
@@ -2482,7 +2482,7 @@ void VRP::eject_neighborhood(int j, int num, int *nodelist)
     memset(ejected,0,(this->num_nodes+1)*sizeof(int));
 
     cnt=0;
-    
+
     // Always eject j
     nodelist[cnt]=j;
     ejected[j]=1;
@@ -2493,7 +2493,7 @@ void VRP::eject_neighborhood(int j, int num, int *nodelist)
     {
         // Find a node near j to eject
         i=(int)(lcgrand(17)*2*num);
-        
+
         // Grab it from the neighborlist
         i=VRPH_MIN(MAX_NEIGHBORLIST_SIZE-1,i);
 
@@ -2508,7 +2508,7 @@ void VRP::eject_neighborhood(int j, int num, int *nodelist)
                 cnt++;
             }
         }
-            
+
     }
 
     // We now have cnt nodes to eject in nodelist
@@ -2572,7 +2572,7 @@ void VRP::normalize_route_numbers()
 
         i=VRPH_ABS(next_array[i]);
     }
-    
+
     if(ctr==0)
     {
         delete [] indices;
@@ -2618,7 +2618,7 @@ void VRP::normalize_route_numbers()
             route[next_index].length = route[current_route].length;
             route[next_index].load = route[current_route].load;
             route[next_index].num_customers = route[current_route].num_customers;
-            
+
             next_index++;
 
 
@@ -2648,7 +2648,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
 
     int i,k, cnt;
     // Define the search space
-    
+
 
     if( rules & VRPH_USE_NEIGHBOR_LIST )
     {
@@ -2662,7 +2662,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
             k=nodes[j].neighbor_list[i].position;
             if( routed[k] == true)
             {
-                // The node is routed 
+                // The node is routed
                 if(rules & VRPH_INTER_ROUTE_ONLY)
                 {
                     // Make sure k is in a different route
@@ -2670,7 +2670,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
                     {
                         search_space[cnt] = k;
                         cnt++;
-                        
+
                     }
                 }
                 else
@@ -2684,7 +2684,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
                             // The node is in a different route - add to the search space
                             search_space[cnt] = k;
                             cnt++;
-                            
+
                         }
                     }
                     else
@@ -2692,8 +2692,8 @@ bool VRP::create_search_neighborhood(int j, int rules)
                         // No intra/inter restrictions
                         search_space[cnt] = k;
                         cnt++;
-                        
-            
+
+
                     }
                 }
             }
@@ -2705,7 +2705,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
 
     // Otherwise no neighborlist
     if( (rules & VRPH_INTRA_ROUTE_ONLY) )
-    {        
+    {
         // Search_space is just the route itself
         search_space[0]=VRPH_DEPOT;
         search_space[1]=this->route[route_num[j]].start;
@@ -2737,12 +2737,12 @@ bool VRP::create_search_neighborhood(int j, int rules)
     }
 
     if( (rules & VRPH_INTER_ROUTE_ONLY) )
-    {        
-        // Only nodes in a different route        
+    {
+        // Only nodes in a different route
         i=0;
         search_space[i]=VRPH_DEPOT;
         search_size=1;
-        k=VRPH_ABS(next_array[search_space[i]]);    
+        k=VRPH_ABS(next_array[search_space[i]]);
         i++;
 
         for(;;)
@@ -2762,7 +2762,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
 
     }
 
-    
+
     // Search space will consist of all positions in routes moving in the
     // given direction
 
@@ -2777,7 +2777,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
         // First node in next route in the solution
         for(;;)
         {
-            search_space[i+1]=VRPH_ABS(next_array[search_space[i]]);    
+            search_space[i+1]=VRPH_ABS(next_array[search_space[i]]);
             search_size++;
             if(search_space[i+1]==VRPH_DEPOT)
                 goto randomize;
@@ -2798,14 +2798,14 @@ bool VRP::create_search_neighborhood(int j, int rules)
         // Last node in previous route in the solution
         for(;;)
         {
-            search_space[i+1]=VRPH_ABS(pred_array[search_space[i]]);    
+            search_space[i+1]=VRPH_ABS(pred_array[search_space[i]]);
             search_size++;
             if(search_space[i+1]==VRPH_DEPOT)
                 goto randomize;
             i++;
 
         }
-    
+
     }
 
     // No rules given - search space is set of all nodes
@@ -2817,7 +2817,7 @@ bool VRP::create_search_neighborhood(int j, int rules)
 
     for(;;)
     {
-        search_space[i+1]=VRPH_ABS(next_array[search_space[i]]);    
+        search_space[i+1]=VRPH_ABS(next_array[search_space[i]]);
         search_size++;
         if(search_space[i+1]==VRPH_DEPOT)
             goto randomize;
@@ -2831,7 +2831,7 @@ randomize:
         random_permutation(search_space, search_size);
 
     return true;
-    
+
 
 
 }
@@ -2851,8 +2851,8 @@ double VRP::insertion_cost(int u, int a, int b)
 
     if(a==b && b==VRPH_DEPOT)
         return d[VRPH_DEPOT][u]+d[u][VRPH_DEPOT];// assume feasible!!
-    
-    if(a==u || u==b || u==VRPH_DEPOT) 
+
+    if(a==u || u==b || u==VRPH_DEPOT)
         report_error("%s: overlap or VRPH_DEPOT found\n",__FUNCTION__);
 
     if(routed[a]==false || routed[b]==false)
@@ -2882,7 +2882,7 @@ double VRP::insertion_cost(int u, int a, int b)
 
     if(nodes[u].demand+route[new_route].load>max_veh_capacity)
         return VRP_INFEASIBLE;
-    
+
     double increase=d[a][u] + d[u][b] - d[a][b];
     if(route[new_route].length+increase>max_route_length)
         return VRP_INFEASIBLE;
@@ -3091,7 +3091,7 @@ bool VRP::before(int a, int b)
 
     if(a==VRPH_DEPOT || b==VRPH_DEPOT)
         report_error("%s: before called with VRPH_DEPOT\n",__FUNCTION__);
-    
+
     if(route_num[a]!=route_num[b])
     {
         fprintf(stderr,"Ordering error: before called with %d and %d not in the same route!\n",a,b);
@@ -3126,7 +3126,7 @@ void VRP::update(VRPMove *M)
     ///
 
     if(M->num_affected_routes==0)    // Nothing to do!
-        return;    
+        return;
 
     int i;
 
@@ -3146,7 +3146,7 @@ void VRP::update(VRPMove *M)
     total_route_length = M->new_total_route_length;
 
     // # of routes
-    total_number_of_routes = M->total_number_of_routes; 
+    total_number_of_routes = M->total_number_of_routes;
 
     return;
 
@@ -3174,7 +3174,7 @@ void VRP::compute_route_center(int r)
     }
 
     route[r].x_center = total_x / ((double) route[r].num_customers);
-    route[r].y_center = total_y / ((double) route[r].num_customers);    
+    route[r].y_center = total_y / ((double) route[r].num_customers);
 
 }
 void VRP::find_neighboring_routes()
@@ -3182,7 +3182,7 @@ void VRP::find_neighboring_routes()
     ///
     /// Finds the nearest set of neighboring routes, placing
     /// the corresponding set of route numbers in each route's
-    /// neighboring_routes[] array.  
+    /// neighboring_routes[] array.
     ///
 
     int i,j;
@@ -3216,11 +3216,11 @@ void VRP::find_neighboring_routes()
 
     // Now sort each row in put the top MAX_NEIGHBORING_ROUTES in the route structs.
 
-    
+
     for(i=1;i<=total_number_of_routes;i++)
         qsort(rd[i],total_number_of_routes+1,sizeof(VRPNeighborElement),VRPNeighborCompare);
-    
-    
+
+
 
     for(i=1;i<=total_number_of_routes;i++)
     {
@@ -3234,7 +3234,7 @@ void VRP::find_neighboring_routes()
     delete [] rd[0];
     delete [] rd;
 
-    
+
 
     return;
 }
@@ -3245,16 +3245,16 @@ void VRP::capture_best_solution()
     /// Determines if the current solution is the best found so far.
     ///
 
-    if( (this->total_route_length < this->best_total_route_length) && 
+    if( (this->total_route_length < this->best_total_route_length) &&
         (VRPH_ABS(this->total_route_length - this->best_total_route_length) > VRPH_EPSILON) )
     {
         this->best_total_route_length=this->total_route_length;
         this->export_solution_buff(this->best_sol_buff);
-        
+
     }
 
-    
-    if(this->total_route_length < this->solution_wh->worst_obj || 
+
+    if(this->total_route_length < this->solution_wh->worst_obj ||
         this->solution_wh->num_sols < this->solution_wh->max_size)
     {
         VRPSolution this_sol(this->num_nodes);
@@ -3264,14 +3264,14 @@ void VRP::capture_best_solution()
 
         // Export buffer
         this->export_canonical_solution_buff(this_sol.sol);
-        
-        this->solution_wh->add_sol(&this_sol, 0); 
+
+        this->solution_wh->add_sol(&this_sol, 0);
         // We don't know any information to help us know where to insert
     }
 
     return;
 
-    
+
 }
 
 void VRP::update_solution_wh()
@@ -3288,9 +3288,9 @@ void VRP::update_solution_wh()
     // Export buffer
     this->export_canonical_solution_buff(this_sol.sol);
 
-    this->solution_wh->add_sol(&this_sol, 0); 
+    this->solution_wh->add_sol(&this_sol, 0);
     // We don't know any information to help us know where to insert
-    
+
 
     return ;
 
@@ -3303,7 +3303,7 @@ void VRP::update_route(int j, VRPRoute *R)
     ///
     /// Copies the fields of route j in the current solution to the
     /// VRPRoute R, also updating the ordering, x, and y arrays.
-    /// The ordering is normalized by having start<end.  
+    /// The ordering is normalized by having start<end.
     ///
 
     int i, current;
@@ -3338,7 +3338,7 @@ void VRP::update_route(int j, VRPRoute *R)
         }
 
         R->total_service_time=st;
-        
+
         return;
     }
 
@@ -3399,7 +3399,7 @@ double VRP::split(double p)
     // Select a random beta in (min_theta, max_theta ) and see how the split is
     // Stop when we get a satisfactory split
 
-    
+
     for(;;)
     {
         beta = this->min_theta + (double)(lcgrand(10))*.5*(max_theta - min_theta);
@@ -3412,7 +3412,7 @@ double VRP::split(double p)
             if(this->nodes[j+1].y >= tan(beta)*(this->nodes[j+1].x))
                 k++;
         }
-    
+
         if( (k>=(int)(p*(double)(this->num_nodes))) && (k<=(int)((1-p)*(double)(this->num_nodes))))
             break;    // The split is good
     }
@@ -3427,7 +3427,7 @@ double VRP::split(double p)
         }
     }
 
-    
+
     delete [] thetas;
     return beta;
 }
@@ -3439,7 +3439,7 @@ int VRP::split_routes(double p, int **ejected_routes, double *t)
     /// Splits an existing VRP into two parts by drawing a random
     /// ray from the VRPH_DEPOT.  We repeatedly try to split the problem in this way
     /// until we have two sets of nodes that each has k nodes where k is between p*num_nodes and
-    /// (1-p)*num_nodes.  Next, we take the larger part of the split solution and then 
+    /// (1-p)*num_nodes.  Next, we take the larger part of the split solution and then
     /// keep all the routes that have at least one node in the larger part.  The route-based
     /// decisions are based on the currently loaded solution.  The ejected routes
     /// are placed in the ejected_routes[][] array and the function returns the number
@@ -3467,7 +3467,7 @@ int VRP::split_routes(double p, int **ejected_routes, double *t)
     // Select a random beta in (min_theta, max_theta ) and see how the split is
     // Stop when we get a satisfactory split
 
-    
+
     for(;;)
     {
         beta = this->min_theta + (double)(lcgrand(10))*.5*(max_theta - min_theta);
@@ -3480,7 +3480,7 @@ int VRP::split_routes(double p, int **ejected_routes, double *t)
             if(this->nodes[j+1].y >= tan(beta)*(this->nodes[j+1].x))
                 k++;
         }
-    
+
         if( (k>=(int)(p*(double)(this->num_nodes))) && (k<=(int)((1-p)*(double)(this->num_nodes))))
         {
             break;    // The split is good
@@ -3498,7 +3498,7 @@ int VRP::split_routes(double p, int **ejected_routes, double *t)
 
         while(current!=VRPH_DEPOT)
         {
-            
+
             if(this->nodes[current].y <= tan(beta)*(this->nodes[current].x))
             {
                 // We have at least one node inside the large part
@@ -3510,15 +3510,15 @@ int VRP::split_routes(double p, int **ejected_routes, double *t)
         }
         if(will_eject)
         {
-            // Eject route i from the solution - place the ejected nodes in 
+            // Eject route i from the solution - place the ejected nodes in
             // the ejected_routes[][] array
             this->eject_route(i, ejected_routes[num_ejected]);
             num_ejected++;
 
         }
-        
+
     }
-    
+
     delete [] thetas;
 
     *t=beta;
@@ -3528,11 +3528,11 @@ int VRP::split_routes(double p, int **ejected_routes, double *t)
 
 void VRP::fix_edge(int start, int end)
 {
-    /// 
+    ///
     /// Forces that the provided edge always remains in the solution.
     /// The edge may not currently be in the solution, but once it is encountered
     /// it will remain in the solution until the edge is unfixed.  Note that the
-    /// fixing of edges is only relevant if you use the heuristics with a 
+    /// fixing of edges is only relevant if you use the heuristics with a
     /// VRPH_FIXED_EDGES rules.
     ///
 
@@ -3557,7 +3557,7 @@ void VRP::fix_edge(int start, int end)
 
 void VRP::unfix_edge(int start, int end)
 {
-    /// 
+    ///
     /// Unfixes an edge that is already fixed.
     ///
 
@@ -3607,7 +3607,7 @@ void VRP::fix_string(int *node_string, int k)
     for(int i=0;i<k-1;i++)
         this->fix_edge(node_string[i], node_string[i+1]);
 
-    
+
 }
 
 
@@ -3731,7 +3731,7 @@ void VRP::perturb_locations(double c)
 
         this->nodes[i].x += v*cos(theta);
         this->nodes[i].y += v*sin(theta);
-        
+
     }
 
     // Now re-create the distance matrix
@@ -3752,7 +3752,7 @@ void VRP::add_route(int *route_buff)
     /// be terminated with a -1.
     ///
 
-    // We will do this by exporting the current solution to a buffer, appending the 
+    // We will do this by exporting the current solution to a buffer, appending the
     // new route to this buffer, and then importing the new resulting solution.
     // Probably not the fastest way, but we have many fields to update when adding a
     // new route!
@@ -3776,12 +3776,12 @@ void VRP::add_route(int *route_buff)
         temp_buff[0]++;
         i++;
     }
-    
+
     temp_buff[old_num+1+i]=VRPH_DEPOT;
-    
+
     // Now import the new solution
     this->import_solution_buff(temp_buff);
-    
+
     this->verify_routes("After adding route");
 
     delete [] temp_buff;
@@ -3813,11 +3813,11 @@ void VRP::append_route(int *sol_buff, int *route_buff)
     sol_buff[current_num+1]=-route_buff[0];
     for(i=1;i<j;i++)
         sol_buff[current_num+1+i]=route_buff[i];
-    
+
 
     // End at the VRPH_DEPOT;
     sol_buff[current_num+1+j]=VRPH_DEPOT;
-        
+
     return;
 
 
@@ -3829,7 +3829,7 @@ int VRP::intersect_solutions(int *new_sol, int **route_list, int *sol1, int *sol
     /// Takes the two solutions sol1 and sol2 and constructs a smaller instance by
     /// ejecting the routes that are in both sol1 and sol2.  If the resulting
     /// solution contains less than min_routes routes, then we add more random routes
-    /// from sol1 until the solution has min_routes.  Returns the number of 
+    /// from sol1 until the solution has min_routes.  Returns the number of
     /// routes ejected from sol1 and places these route buffers in the route_list[][] array which
     /// is a 0-based array of routes.  Note that sol1 and sol2 are assumed to be
     /// full solutions to the VRP instance.  Imports the smaller solution new_sol
@@ -3843,7 +3843,7 @@ int VRP::intersect_solutions(int *new_sol, int **route_list, int *sol1, int *sol
 
     // Find the routes in common
     j = this->find_common_routes(sol1, sol2, rnums);
-    
+
     if(j==0)
     {
         // No routes in common - just put sol1 into new_sol
@@ -3903,7 +3903,7 @@ int VRP::intersect_solutions(int *new_sol, int **route_list, int *sol1, int *sol
 bool VRP::osman_insert(int k, double alpha)
 {
     ///
-    /// Inserts node k into a new location in the solution 
+    /// Inserts node k into a new location in the solution
     /// according to Osman's savings heuristic.  Given existing
     /// edges i-k-j and l-m, with parameter alpha, we move k to
     /// new location l-k-m such that the quantity
@@ -3914,7 +3914,7 @@ bool VRP::osman_insert(int k, double alpha)
     double savings, best_savings, ik,kj,ij;
     Postsert postsert;
     Presert presert;
-    VRPMove M;    
+    VRPMove M;
 
     if(k==VRPH_DEPOT)
         return false;
@@ -3952,7 +3952,7 @@ bool VRP::osman_insert(int k, double alpha)
         else
         {
             // m<0 indicating the end of a route
-            
+
             // consider the edge l-VRPH_DEPOT
             mm=VRPH_DEPOT;
             savings = (ik + kj - this->d[l][mm]) - alpha*(this->d[l][k] + this->d[k][mm] - ij);
@@ -3987,7 +3987,7 @@ bool VRP::osman_insert(int k, double alpha)
         m=this->next_array[l];
     }
 
-    // We now have the best location to move node k by 
+    // We now have the best location to move node k by
     // placing in between best_l and best_m;
 
     if(best_savings==VRP_INFINITY)
@@ -4045,7 +4045,7 @@ int VRP::osman_perturb(int num, double alpha)
 
     return num;
 
-    
+
 }
 
 bool VRP::check_fixed_edges(const char *message)
@@ -4103,7 +4103,7 @@ bool VRP::check_fixed_edges(const char *message)
                     }
                 }
             }
-    
+
         }
 
     }
@@ -4114,7 +4114,7 @@ int VRP::find_common_routes(int *sol1, int *sol2, int *route_nums)
 {
     ///
     /// Finds the routes that are shared by the two solutions sol1 and sol2.
-    /// Places the numbers of these routes (numbers from sol1 which are 1-based) 
+    /// Places the numbers of these routes (numbers from sol1 which are 1-based)
     /// into the route_nums[] buffer and returns the number of shared routes.
     ///
 
@@ -4125,7 +4125,7 @@ int VRP::find_common_routes(int *sol1, int *sol2, int *route_nums)
 
     // First, import sol1
     this->import_solution_buff(sol1);
-    
+
     r1=this->total_number_of_routes;
     h11=new int[r1+1]; h12=new int[r1+1];// 1-based arrays
     L1=new double[r1+1];
@@ -4141,7 +4141,7 @@ int VRP::find_common_routes(int *sol1, int *sol2, int *route_nums)
 
     // Now import sol2
     this->import_solution_buff(sol2);
-    
+
     r2=this->total_number_of_routes;
     h21=new int[r2+1]; h22=new int[r2+1];// 1-based arrays
     L2=new double[r2+1];
@@ -4152,7 +4152,7 @@ int VRP::find_common_routes(int *sol1, int *sol2, int *route_nums)
         h22[i]=rte.hash(SALT_2);
         L2[i]=rte.length;
     }
-    
+
 
 
     // Now compare the hash values
@@ -4218,7 +4218,7 @@ void VRP::set_daily_demands(int day)
             else
                 this->nodes[i].demand=-1;
 
-        }    
+        }
 
     }
 }
@@ -4252,7 +4252,7 @@ void VRP::update_arrival_times()
     int routenum, next, current;
     double t;
 
-    // Set the arrival times to -1 so that the only ones with positive 
+    // Set the arrival times to -1 so that the only ones with positive
     // arrival_time values are those that are actually visited
     for(int i=1;i<=this->num_original_nodes;i++)
         this->nodes[i].arrival_time=-1;
@@ -4278,7 +4278,7 @@ void VRP::update_arrival_times()
 
             }
 
-            // Now subtract the service time at t as this is included in the distance 
+            // Now subtract the service time at t as this is included in the distance
             // matrix
             t-=this->nodes[i].service_time;
             this->nodes[i].arrival_time=t;
@@ -4313,8 +4313,8 @@ bool VRP::check_tabu_status(VRPMove *M, int *old_sol)
             if(M->route_custs[i]==0)
                 return true;
         }
-    }    
-    
+    }
+
     VRPRoute r(this->num_nodes);
     int num_tabu_routes=0;
 
@@ -4326,17 +4326,17 @@ bool VRP::check_tabu_status(VRPMove *M, int *old_sol)
     {
         this->update_route(M->route_nums[i],&r);
         r.hash_val = r.hash(SALT_1);
-        r.hash_val2 = r.hash(SALT_2);    
-        
+        r.hash_val2 = r.hash(SALT_2);
+
         for(j=0;j<this->tabu_list->num_entries;j++)
         {
             if(r.hash_val==this->tabu_list->hash_vals1[j] && r.hash_val2==this->tabu_list->hash_vals2[j])
                 // The move is tabu!
-                num_tabu_routes++;            
+                num_tabu_routes++;
         }
-        
+
     }
-    
+
 
     if(num_tabu_routes>0)
     {
@@ -4352,9 +4352,9 @@ bool VRP::check_tabu_status(VRPMove *M, int *old_sol)
     printf("Move is not Tabu.  Updating list of %d routes\n",M->num_affected_routes);
 #endif
 
-    // The move is not tabu - update the tabu list 
+    // The move is not tabu - update the tabu list
     for(i=0;i<M->num_affected_routes;i++)
-    {    
+    {
         this->update_route(M->route_nums[i],&r);
 
         this->tabu_list->update_list(&r);
@@ -4372,7 +4372,7 @@ void VRP::print_stats()
     /// heuristic operator.
     ///
 
-    printf("                       (Moves,      Evaluations)\n"); 
+    printf("                       (Moves,      Evaluations)\n");
     printf("     One Point Move:   (%010d, %010d)\n",
         this->num_moves[ONE_POINT_MOVE_INDEX], this->num_evaluations[ONE_POINT_MOVE_INDEX]);
     printf("     Two Point Move:   (%010d, %010d)\n",

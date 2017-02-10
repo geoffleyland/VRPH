@@ -47,12 +47,12 @@
 
 #define ALL_HEURISTICS                          (1<<20)|(1<<21)|(1<<22)|(1<<23)|(1<<24)|(1<<25)|(1<<26)|(1<<27)
 
-// Values of heuristics that can be used in functions such as 
+// Values of heuristics that can be used in functions such as
 // clean_routes
 
 #define NUM_HEURISTICS                  7
 
-#define ONE_POINT_MOVE_INDEX            0                    
+#define ONE_POINT_MOVE_INDEX            0
 #define TWO_POINT_MOVE_INDEX            1
 #define TWO_OPT_INDEX                   2
 #define OR_OPT_INDEX                    3

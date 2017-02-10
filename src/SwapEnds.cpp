@@ -23,7 +23,7 @@ bool SwapEnds::evaluate(class VRP *V, int a, int v, VRPMove *M)
     /// VRPH_DEPOT-i-a-x-y-z-VRPH_DEPOT and VRPH_DEPOT-t-u-v-j-k-l-VRPH_DEPOT
     ///
 
-    
+
     int load_after_a, load_after_v, new_a_load, new_v_load, added_to_a, added_to_v, n, b, w;
     double new_a_len, new_v_len ;
     double savings;
@@ -34,19 +34,19 @@ bool SwapEnds::evaluate(class VRP *V, int a, int v, VRPMove *M)
         report_error("%s: Swap ends called with depot; Move doesn't make sense\n",__FUNCTION__);
 
     n = V->num_nodes;
-    
+
 
     if(V->route_num[a] == V->route_num[v])
     {
         fprintf(stderr,"a=%d; v=%d; %d==%d!!\n",a,v,V->route_num[a], V->route_num[v]);
         report_error("%s: swap ends called with a and v in same route!\n",__FUNCTION__);
     }
-    
+
     w = VRPH_MAX(V->next_array[v],0);
     b = VRPH_MAX(V->next_array[a],0);
-    
+
     savings = ((V->d[a][w] + V->d[v][b]) - (V->d[a][b] + V->d[v][w]));
-    
+
     V->get_segment_info(VRPH_DEPOT, a, &Sa);
     added_to_v= V->route[V->route_num[a]].num_customers-Sa.num_custs;
 
@@ -56,8 +56,8 @@ bool SwapEnds::evaluate(class VRP *V, int a, int v, VRPMove *M)
     added_to_a=V->route[V->route_num[v]].num_customers-Sv.num_custs;
 
     load_after_v = V->route[V->route_num[v]].load - Sv.load;
-    
-    
+
+
     /// Example: ( a & v input): VRPH_DEPOT-i-a-b-j-k-l-VRPH_DEPOT and VRPH_DEPOT-t-u-v-w-x-y-z-VRPH_DEPOT becomes
     /// VRPH_DEPOT-i-a-w-x-y-z-VRPH_DEPOT and VRPH_DEPOT-t-u-v-b-j-k-l-VRPH_DEPOT
 
@@ -66,7 +66,7 @@ bool SwapEnds::evaluate(class VRP *V, int a, int v, VRPMove *M)
     new_v_len = Sv.len + V->route[V->route_num[a]].length - Sa.len  + V->d[v][b]-V->d[a][b];
     new_v_load = Sv.load + load_after_a;
 
-    if(new_a_len > V->max_route_length || new_v_len > V->max_route_length 
+    if(new_a_len > V->max_route_length || new_v_len > V->max_route_length
         || new_a_load > V->max_veh_capacity || new_v_load > V->max_veh_capacity )
         // We violate some capacity constraint & the move is infeasible
         return false;
@@ -90,10 +90,10 @@ bool SwapEnds::evaluate(class VRP *V, int a, int v, VRPMove *M)
     M->num_arguments=2;
     M->move_arguments[0]=a;
     M->move_arguments[1]=v;
-    
 
-    return true;    
-    
+
+    return true;
+
 }
 
 bool SwapEnds::move(VRP *V, int a, int v)
@@ -107,7 +107,7 @@ bool SwapEnds::move(VRP *V, int a, int v)
     /// are made, and the function returns true.  Returns false if the move
     /// is infeasible.
     ///
-    
+
 
     VRPMove M;
 
@@ -122,11 +122,11 @@ bool SwapEnds::move(VRP *V, int a, int v)
 #if SWAP_ENDS_DEBUG>0
         printf("Calling swap ends(%d,%d)\n",a,v);
 #endif
-    
+
 
     if(a==VRPH_DEPOT || v==VRPH_DEPOT)
         report_error("%s: Swap ends called with depot; Move doesn't make sense\n",__FUNCTION__);
-    
+
 
     n = V->num_nodes;
 
@@ -141,16 +141,16 @@ bool SwapEnds::move(VRP *V, int a, int v)
 
     a_end = V->route[V->route_num[a]].end;
     a_start = V->route[V->route_num[a]].start;
-    
+
     route_after_a = V->route_num[-V->next_array[a_end]];
     route_before_a = V->route_num[-V->pred_array[a_start]];
 
     v_end = V->route[V->route_num[v]].end;
     v_start = V->route[V->route_num[v]].start;
-    
+
     route_after_v = V->route_num[-V->next_array[v_end]];
     route_before_v = V->route_num[-V->pred_array[v_start]];
-    
+
     u = V->next_array[v];
     b = V->next_array[a];
 
@@ -191,26 +191,26 @@ bool SwapEnds::move(VRP *V, int a, int v)
         }
     }
 
-    
+
 
     // Now update the start, end, length, and load info for V->route_num[a] and V->route_num[v]
 
-    
+
     V->route[V->route_num[a]].start = a_start;
     V->route[V->route_num[a]].end = v_end;
 
-    
+
     V->route[V->route_num[v]].start = v_start;
     V->route[V->route_num[v]].end = a_end;
 
     // Now update the route_num-looping...
-    
+
     current_node = a;
     while(current_node > 0)
     {
         V->route_num[current_node] = V->route_num[a];
         current_node = V->next_array[current_node];
-        
+
     }
 
     current_node = v;
@@ -223,7 +223,7 @@ bool SwapEnds::move(VRP *V, int a, int v)
 
     // Now we have to update the routes following the modified a and v routes
 
-    // Get the new start and end values 
+    // Get the new start and end values
     a_start = V->route[V->route_num[a]].start;
     v_start = V->route[V->route_num[v]].start;
     a_end = V->route[V->route_num[a]].end;
@@ -232,12 +232,12 @@ bool SwapEnds::move(VRP *V, int a, int v)
 
     if(route_after_a != V->route_num[v] && route_after_v != V->route_num[a])
     {
-        
+
 
         // Simple case - just switch the two
         if(route_after_a != 0 && route_after_v!=0)
         {
-            
+
             V->next_array[a_end] = -V->route[route_after_a].start;
             V->pred_array[V->route[route_after_a].start] = -a_end;
 
@@ -261,24 +261,24 @@ bool SwapEnds::move(VRP *V, int a, int v)
 
         if(route_after_v == 0)
         {
-            
+
             V->next_array[v_end] = VRPH_DEPOT;
             V->pred_array[VRPH_DEPOT] = -v_end;
 
             V->next_array[a_end] = -V->route[route_after_a].start;
-        
+
             V->pred_array[V->route[route_after_a].start] = -a_end;
 
             return true;
         }
     }
 
-    
+
     if(route_after_a == V->route_num[v] && route_after_v == V->route_num[a])
     {
         // If we don't change anything here, then the new V->route_num[v] will point to itself!
-        // To fix this, make the new_v_route point 
-        
+        // To fix this, make the new_v_route point
+
         V->next_array[a_end] = -v_start;
         V->pred_array[v_start] = -a_end;
 
@@ -287,15 +287,15 @@ bool SwapEnds::move(VRP *V, int a, int v)
 
         return true;
 
-        
+
     }
 
-    
+
     if(route_after_a == V->route_num[v])
     {
-        
+
         // If we don't change anything here, then the new V->route_num[v] will point to itself!
-        
+
         V->next_array[a_end] = -v_start;
         V->pred_array[v_start] = -a_end;
 
@@ -316,14 +316,14 @@ bool SwapEnds::move(VRP *V, int a, int v)
 
         return true;
 
-        
+
     }
 
     if(route_after_v == V->route_num[a])
-    {        
-            
+    {
+
         // If we don't change anything here, then the new V->route_num[a] will point to itself!
-        
+
         V->next_array[v_end] = -a_start;
         V->pred_array[a_start] = -v_end;
 

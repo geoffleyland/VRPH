@@ -23,13 +23,13 @@ VRPNode::VRPNode()
 
     x = 0;
     y = 0;
-    
+
     for(i = 0;i < MAX_NEIGHBORLIST_SIZE; i++)
     {
         this->neighbor_list[i].position = 0;
         this->neighbor_list[i].val = 0;
     }
-    
+
     this->arrival_time=0;
     this->service_time=0;
     this->daily_demands=NULL;
@@ -52,4 +52,4 @@ VRPNode::~VRPNode()
         delete [] this->daily_service_times;
 }
 
-    
+

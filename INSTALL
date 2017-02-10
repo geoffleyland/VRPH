@@ -12,9 +12,9 @@ four applications.  Again, these are all self-contained
 and the solution should build with no warnings or errors.
 
 When you run "make" or build the Visual Studio solution,
-the VRPH-1.0 library (libvrph.a or vrph.lib) is created in 
+the VRPH-1.0 library (libvrph.a or vrph.lib) is created in
 the VRPH-1.0/lib/ directory.  The four applications are then
-created in the VRPH-1.0/bin directory by statically linking 
+created in the VRPH-1.0/bin directory by statically linking
 to this library.
 
 To build the vrp_sp application, you will

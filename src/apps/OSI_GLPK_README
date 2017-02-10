@@ -5,10 +5,10 @@ copy of the OSI from the Coin-OR website (or grab it from the svn repository).
 Then cd to the root directory of the OSI tree and make a directory for your build:
 
 mkdir x86_64_build
-cd x86_64_build 
- 
-You don't need all of the OSI functionality, and I used static libraries with GLPK as follows: 
- 
+cd x86_64_build
+
+You don't need all of the OSI functionality, and I used static libraries with GLPK as follows:
+
 ../configure --with-glpk-lib="-L$HOME/GLPK/lib -lglpk" --with-glpk-incdir="$HOME/GLPK/include" COIN_SKIP_PROJECTS="DyLP Vol Cbc Cgl" --enable-static --disable-shared -C
 make
 make test

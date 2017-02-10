@@ -128,7 +128,7 @@ public:
     void unfix_edge(int start, int end);
     void fix_string(int *node_string, int k);
 
-    // Accessor functions for private data 
+    // Accessor functions for private data
     int get_num_nodes();
     double get_total_route_length();
     double get_total_service_time();
@@ -163,7 +163,7 @@ public:
     int num_evaluations[NUM_HEURISTICS];
     int num_moves[NUM_HEURISTICS];
 
-private:  
+private:
 
     // Problem parameters, description, etc.
     int num_nodes;
@@ -182,7 +182,7 @@ private:
     double max_route_length;
     double min_route_length;
     double orig_max_route_length;
-    int min_vehicles;    // Not currently used    
+    int min_vehicles;    // Not currently used
     bool has_service_times;
     double fixed_service_time;
     int edge_weight_type;
@@ -195,9 +195,9 @@ private:
     int neighbor_list_size;
     double temperature;            // For VRPH_SIMULATED_ANNEALING
     double cooling_ratio;
-    
+
     bool symmetric;                 // To keep track of symmetric/asymmetric instances
-                                    // Note! Asymmetric instances have received only 
+                                    // Note! Asymmetric instances have received only
                                     // limited testing!
     bool can_display;
 
@@ -214,9 +214,9 @@ private:
     // that have a tiny (perhaps zero) effect on route length
 
     // Local search neighborhood creation
-    bool create_search_neighborhood(int j, int rules);    
-    int search_size;            
-    int *search_space;            
+    bool create_search_neighborhood(int j, int rules);
+    int search_size;
+    int *search_space;
 
     // Solution storage
     int *next_array;
@@ -244,7 +244,7 @@ private:
     // To handle infeasibilities
     bool check_feasibility(VRPViolation *VV);
     class VRPViolation violation;
-    bool is_feasible(VRPMove *M, int rules);    
+    bool is_feasible(VRPMove *M, int rules);
 
     // Solution manipulation
     bool postsert_dummy(int i);
@@ -254,7 +254,7 @@ private:
     int osman_perturb(int num, double alpha);
     bool insert_node(int j, int i, int k);
     void perturb_locations(double c);
-    void find_cheapest_insertion(int j, int *edge, double *costs, int rules);    
+    void find_cheapest_insertion(int j, int *edge, double *costs, int rules);
     double insertion_cost(int u, int a, int b);
     double ejection_cost(int u);
     void update(VRPMove *M);
@@ -265,7 +265,7 @@ private:
 
     // Solution memory
     void capture_best_solution();
-    void update_solution_wh();    
+    void update_solution_wh();
 
     // Solution information
     bool get_segment_info(int a, int b, struct VRPSegment *S);
@@ -275,7 +275,7 @@ private:
     void update_arrival_times();
     bool  check_move(VRPMove *M, int rules);
 
-    // Savings evaluation - inline this to speed things up 
+    // Savings evaluation - inline this to speed things up
     inline bool check_savings(VRPMove *M, int rules){
         ///
         /// Evaluates the given savings in terms of the rules.
@@ -333,7 +333,7 @@ private:
                 {
                     // We have service times so remove the service time from the
                     // deviation calculation
-                    if( ((total_route_length - total_service_time) + M->savings <= 
+                    if( ((total_route_length - total_service_time) + M->savings <=
                         ((1+deviation)*(record-total_service_time))) )
                     {
                         M->evaluated_savings=true;

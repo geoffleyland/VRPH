@@ -16,9 +16,9 @@ bool Concatenate::evaluate(VRP *V, int i_route, int j_route, int rules, VRPMove 
 {
 
     ///
-    /// This function takes route i_route and j_route and attempts to 
+    /// This function takes route i_route and j_route and attempts to
     /// concatenate them together.
-    /// Example: 
+    /// Example:
     /// 1-i-a-b-c-...-x-1
     /// and
     /// 1-aa-bb-...-zz-j-1
@@ -27,8 +27,8 @@ bool Concatenate::evaluate(VRP *V, int i_route, int j_route, int rules, VRPMove 
     /// Note that the move_arguments i_route and j_route refer to the
     /// route numbers themselves and not the node numbers!
     ///
-    
-    
+
+
     double new_length, i_length, j_length;
     int new_load, i_load, j_load;
     int i,j;
@@ -52,10 +52,10 @@ bool Concatenate::evaluate(VRP *V, int i_route, int j_route, int rules, VRPMove 
 
     new_length = j_length + i_length + V->d[j][i] - (V->d[VRPH_DEPOT][i] +
         V->d[j][VRPH_DEPOT]);
-        
+
     new_load = i_load + j_load;
 
-    
+
 
     M->num_affected_routes=2;
     M->route_nums[0]=i_route;
@@ -79,7 +79,7 @@ bool Concatenate::evaluate(VRP *V, int i_route, int j_route, int rules, VRPMove 
         return true;
     else
         return false;
-    
+
 }
 
 bool Concatenate::move(VRP *V, int i_route, int j_route)
@@ -87,7 +87,7 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
     ///
     /// Attempts to merge the two routes i_route and j_route into a single route
     ///
-    
+
     VRPMove M;
     int i,j, pre_i, pre_j, post_i, post_j, end_i, start_j, route_after_i,
         route_after_j, route_before_i, route_before_j, current_node, next_node;
@@ -96,7 +96,7 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
     j= V->route[j_route].end;
     // First, evaluate the move
 
-    int rules=0; 
+    int rules=0;
     if(evaluate(V,i_route,j_route, rules, &M)==false)
         return false;    // the move is not allowed
 
@@ -105,7 +105,7 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
     V->update(&M);
 
     // Modify the arrays
-    
+
     // pre_i is what used to be before i
     pre_i= V->pred_array[i];
     // post_i is what used to be after i
@@ -120,12 +120,12 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
 
     // j is the end of its own route!
     start_j= V->route[j_route].start;
-    
+
     // This is the first node in the route that used to follow i
     route_after_i= V->next_array[end_i];
     // This is the last node in the route that used to precede i;
     route_before_i=pre_i;
-    
+
     // This is the first node in the route that used to precede j
     route_before_j= V->pred_array[start_j];
     // This is the first node in the route that used to follow j
@@ -154,12 +154,12 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
         // Update i_route information
         V->route[i_route].end=end_i;
         V->route[i_route].start=start_j;
-        
+
 #if CONCATENATE_VERIFY
         V->verify_routes("Concatenate 1");
 #endif
-        
-        return true;        
+
+        return true;
     }
 
     if(VRPH_ABS(route_after_i)!=start_j)
@@ -193,13 +193,13 @@ bool Concatenate::move(VRP *V, int i_route, int j_route)
     // Update route information
     V->route[i_route].end=end_i;
     V->route[i_route].start=start_j;
-    
 
-    
+
+
 #if CONCATENATE_VERIFY
     V->verify_routes("CWConcatenate 2");
 #endif
-    
+
     return true;
 
 }

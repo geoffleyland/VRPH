@@ -25,7 +25,7 @@ public:
     ~ClarkeWright();
     bool Construct(class VRP *V, double lambda, bool use_neighbor_list);
     class VRPSavingsElement *s;
-    void CreateSavingsMatrix(class VRP *V, double lambda, bool use_neighbor_list);	
+    void CreateSavingsMatrix(class VRP *V, double lambda, bool use_neighbor_list);
     bool has_savings_matrix;
     int savings_matrix_size;
 

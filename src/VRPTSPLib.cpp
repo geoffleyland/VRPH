@@ -83,7 +83,7 @@ int VRPGetDimension(char *filename)
     {
         fscanf(infile,"%s\n",str1);
         if(feof(infile))
-        {    
+        {
             fprintf(stderr, "The keyword DIMENSION was not found in the TSPLIB file %s\nExiting...\n",filename);
             exit(-1);
         }
@@ -104,10 +104,10 @@ int VRPGetDimension(char *filename)
     fscanf(infile,"%s\n",str1);
     while(strncmp(str1,"EOF",3)!=0)
     {
-        fscanf(infile,"%s\n",str1);        
+        fscanf(infile,"%s\n",str1);
 
         if(feof(infile) && strncmp(str1,"EOF",3)!=0)
-        {    
+        {
             fprintf(stderr, "The keyword EOF was not found in the TSPLIB file %s\n",
                 filename);
             exit(-1);
@@ -127,7 +127,7 @@ int VRPGetNumDays(char *filename)
 {
     ///
     /// Open up filename (assumed to be in TSPLIB format) and get the dimension
-    /// of the problem, scanning for the string "NUM_DAYS".  If the string is not 
+    /// of the problem, scanning for the string "NUM_DAYS".  If the string is not
     /// found, then we assume it is a typical 1-day problem.
     ///
 
@@ -153,7 +153,7 @@ int VRPGetNumDays(char *filename)
     {
         fscanf(infile,"%s\n",str1);
         if(feof(infile))
-        {    
+        {
             // Assume a 1-day problem
             fclose(infile);
             return 1;
@@ -193,7 +193,7 @@ int VRPCheckTSPLIBString(char *s)
     fprintf(stderr,"Didn't find string %s in supported list\n",s);
 #endif
 
-    // Didn't find a supported string - check for other known 
+    // Didn't find a supported string - check for other known
     // unsupported strings
 
 

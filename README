@@ -1,9 +1,9 @@
-VRPH is a library of heuristics for quickly generating 
-solutions to Vehicle Routing Problems.  VRPH was 
-developed by Chris Groer as part of his dissertation at 
-the University of Maryland, College Park.  This code is 
-provided in hopes that it will be useful to others researching 
-computational methods for the VRP.  
+VRPH is a library of heuristics for quickly generating
+solutions to Vehicle Routing Problems.  VRPH was
+developed by Chris Groer as part of his dissertation at
+the University of Maryland, College Park.  This code is
+provided in hopes that it will be useful to others researching
+computational methods for the VRP.
 
 To compile VRPH, read the INSTALL file.  There are no
 external dependencies and it should be straightforward
@@ -14,7 +14,7 @@ to build the code.  Building the code produces at least
 generating good solutions to the VRP
 
 2) vrp_sa - implementation of a simulated annealing
-algorithm for the VRP.  In general, solutions are not as 
+algorithm for the VRP.  In general, solutions are not as
 good as those produced by vrp_rtr.
 
 3) vrp_ej - implementation of a neighborhood ejection-
@@ -37,20 +37,20 @@ not be hard to use a different MIP solver as there is very
 little solver-specific code
 
 2) vrp_plotter - a utility to write graphical illustrations
-of solutions to a .ps file.  This requires one to link to 
+of solutions to a .ps file.  This requires one to link to
 the open source PLPlot library.
 
 The VRPH-1.0/doc directory is a placeholder for Doxygen-generated
 documentation.  See the INSTALL file for details on creating
 this documentation via the makefile.
 
-Right now, the code is able to generate solutions to classical 
-capacitated VRPs.  Adding support for time windows, multiple 
-depots, etc. should not be too difficult and the code was 
-designed to make it somewhat easy to add new constraints.  
+Right now, the code is able to generate solutions to classical
+capacitated VRPs.  Adding support for time windows, multiple
+depots, etc. should not be too difficult and the code was
+designed to make it somewhat easy to add new constraints.
 
-The various subdirectories contain README's that describe 
-the data sets, etc.  See the LICENSE file in this directory for 
+The various subdirectories contain README's that describe
+the data sets, etc.  See the LICENSE file in this directory for
 details on the licensing of this code.
 
 The run_all_tests.sh script runs the vrp_rtr binary on all of the

@@ -18,7 +18,7 @@
 int main(int argc, char *argv[])
 {
     ///
-    /// A main() routine to illustrate usage of Clarke Wright and 
+    /// A main() routine to illustrate usage of Clarke Wright and
     /// Sweep methods to construct an initial solution.
     ///
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     char infile[200];
 
     if(argc < 5 || (strncmp(argv[1],"-help",5)==0 || strcmp(argv[1],"-h")==0 || strcmp(argv[1],"--h")==0))
-    {        
+    {
         fprintf(stderr,"Usage: %s -f vrp_file -m method [-c]\n",argv[0]);
         fprintf(stderr,
             "\t method should be 0 for CW, 1 for Sweep\n"
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
         if(strcmp(argv[i],"-f")==0)
         {
             strcpy(infile,argv[i+1]);
-            has_filename=true;            
+            has_filename=true;
         }
     }
 
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         // Use Clarke Wright with \lambda=1
         printf("Finding initial solution using Clarke-Wright algorithm\n");
         CW.Construct(&V, 1.0, false);
-        
+
     }
     else
     {

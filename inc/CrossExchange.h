@@ -19,8 +19,8 @@ public:
 
 private:
     bool evaluate(class VRP *V, int i1, int i2, int k1, int k2, int j1, int j2, int l1, int l2,
-        int criteria, VRPMove *M);	
-    bool move(class VRP *V, VRPMove *M);	
+        int criteria, VRPMove *M);
+    bool move(class VRP *V, VRPMove *M);
 
 };
 

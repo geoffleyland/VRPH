@@ -23,7 +23,7 @@ class Sweep
 public:
     Sweep();
     bool Construct(class VRP *V);
-    
+
 };
 
 #endif

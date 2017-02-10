@@ -14,7 +14,7 @@
 
 VRPTabuList::VRPTabuList()
 {
-    /// 
+    ///
     /// Default constructor for the VRPTabuList.
     ///
 
@@ -25,12 +25,12 @@ VRPTabuList::VRPTabuList()
     this->hash_vals1=NULL;
     this->hash_vals2=NULL;
 
-    
+
 }
 
 VRPTabuList::VRPTabuList(int t)
 {
-    /// 
+    ///
     /// Constructor for the VRPTabuList with t tabu routes.
     ///
 
@@ -47,13 +47,13 @@ VRPTabuList::VRPTabuList(int t)
         this->hash_vals1[i]=-1;
         this->hash_vals2[i]=-1;
     }
-    
+
 
 }
 
 VRPTabuList::~VRPTabuList()
 {
-    /// 
+    ///
     /// Destructor for the VRPTabuList.
     ///
 
@@ -77,7 +77,7 @@ void VRPTabuList::update_list(VRPRoute *r)
     printf("Adding route with hashes (%d, %d) and length, load (%5.2f, %d) to tabu list\n",
         r->hash_val,r->hash_val2,r->length,r->load);
 #endif
-    
+
     if(this->num_entries < this->max_entries)
     {
         // Update the lists of hash_vals
@@ -91,7 +91,7 @@ void VRPTabuList::update_list(VRPRoute *r)
 #endif
 
         return;
-    
+
     }
 
     // The list is full - overwrite the current start_index entry

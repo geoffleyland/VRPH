@@ -50,10 +50,10 @@ void VRP::show_pred_array()
 bool VRP::verify_routes(const char *message)
 {
     ///
-    /// This debugging function will manually calculate the objective function of the current 
-    /// solution and the route values, etc., and compare with the claimed 
-    /// value.  Returns false if any inconsistencies are found and prints 
-    /// the message.  Returns true with no output otherwise. 
+    /// This debugging function will manually calculate the objective function of the current
+    /// solution and the route values, etc., and compare with the claimed
+    /// value.  Returns false if any inconsistencies are found and prints
+    /// the message.  Returns true with no output otherwise.
     ///
 
     int i, n, cnt;
@@ -72,12 +72,12 @@ bool VRP::verify_routes(const char *message)
     current_node=VRPH_DEPOT;
     next_node=VRPH_ABS(this->next_array[current_node]);
     while(next_node!=VRPH_DEPOT)
-    {    
+    {
         if(VRPH_ABS(this->pred_array[next_node])!=current_node)
         {
             fprintf(stderr,"%d->%d??\nNext: %d->%d\nPred:%d->%d",current_node,next_node,
                 current_node,this->next_array[current_node],next_node,this->pred_array[next_node]);
-            
+
             report_error("%s: Next/pred inconsistency\n",__FUNCTION__);
         }
         current_node=next_node;
@@ -95,7 +95,7 @@ bool VRP::verify_routes(const char *message)
     n=num_nodes;
     // Only consider the nodes in the solution!
 
-    flag=0;    
+    flag=0;
     i = 1;
     cnt = 0;
     route_start = -next_array[VRPH_DEPOT];
@@ -107,7 +107,7 @@ bool VRP::verify_routes(const char *message)
     }
 
     current_node = route_start;
-    current_route = route_num[current_node];    
+    current_route = route_num[current_node];
     current_start = route[current_route].start;
     current_end = route[current_route].end;
     counted_routes++;
@@ -117,8 +117,8 @@ bool VRP::verify_routes(const char *message)
         fprintf(stderr,"Error in initial route start:  %d != %d\n",route_start, current_start);
         report_error(message,__FUNCTION__);
     }
-        
-    
+
+
 
     total_load+=nodes[current_node].demand;
     current_load+=nodes[current_node].demand;
@@ -129,7 +129,7 @@ bool VRP::verify_routes(const char *message)
 
     while(route_start != 0 && i<num_nodes+1)
     {
-        // When we finally get a route beginning at 0, this is the last route 
+        // When we finally get a route beginning at 0, this is the last route
         // and there is no next route, so break out
 
         if(next_array[current_node]==current_node)
@@ -158,7 +158,7 @@ bool VRP::verify_routes(const char *message)
             if(counted_routes != total_number_of_routes)
             {
                 // error in # of routes
-                fprintf(stderr, "Incorrect # of routes recorded %d!=%d\n",counted_routes, 
+                fprintf(stderr, "Incorrect # of routes recorded %d!=%d\n",counted_routes,
                     total_number_of_routes);
                 report_error(message);
 
@@ -178,7 +178,7 @@ bool VRP::verify_routes(const char *message)
                     report_error(message);
                 }
 
-                
+
                 report_error(message);
 
             }
@@ -195,8 +195,8 @@ bool VRP::verify_routes(const char *message)
             {
                 fprintf(stderr,"Route # error for %d and %d: %d!=%d\n",current_node, next_node,
                     route_num[current_node],route_num[next_node]);
-                
-                report_error(message);    
+
+                report_error(message);
             }
             len+=d[current_node][next_node];
             rlen+=d[current_node][next_node];
@@ -227,7 +227,7 @@ bool VRP::verify_routes(const char *message)
                 fprintf(stderr,"%d (calculated) != %d (claimed) in route %d\n",num_in_route,
                     route[current_route].num_customers,current_route);
                 show_route(current_route);
-                
+
                 // Report this now..
                 report_error(message);
             }
@@ -255,7 +255,7 @@ bool VRP::verify_routes(const char *message)
                 report_error(message);
             }
 
-            
+
 
             if(current_load != route[current_route].load)
             {
@@ -264,7 +264,7 @@ bool VRP::verify_routes(const char *message)
             }
 
             i++;
-            route_start = - (next_array[current_node]);    
+            route_start = - (next_array[current_node]);
             current_route = route_num[route_start];
             current_start = route[current_route].start;
             current_end = route[current_route].end;
@@ -295,9 +295,9 @@ bool VRP::verify_routes(const char *message)
 
     fprintf(stderr, "VRP::verify_routes: Verification at '%s' passed\n", message);
     return true;
-}    
+}
 
-void report_error(const char* format, ...) 
+void report_error(const char* format, ...)
 {
     ///
     /// Prints the message and function name to stderr and terminates the program.

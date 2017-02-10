@@ -33,7 +33,7 @@ bool Sweep::Construct(class VRP *V)
     /// provided heuristics (VRPH_DOWNHILL only).
     ///
 
-    // First make sure that we have normalized everything so that VRPH_DEPOT is at 
+    // First make sure that we have normalized everything so that VRPH_DEPOT is at
     // origin
     if(V->depot_normalized==false)
         report_error("%s: Node locations must be normalized to run sweep\n",__FUNCTION__);
@@ -57,14 +57,14 @@ bool Sweep::Construct(class VRP *V)
     qsort(T,n,sizeof(double_int),double_int_compare);
 
     // We will start at a random place in this list and then "wrap around"
-    // Pick a starting point 
+    // Pick a starting point
     int start = VRPH_MIN(V->num_original_nodes, (int)(n*(lcgrand(5))));
 
     Postsert postsert;
     Presert presert;
     VRPMove M1, M2;
     bool post,pre;
-    
+
 
     for(i=0;i<n;i++)
     {
@@ -74,10 +74,10 @@ bool Sweep::Construct(class VRP *V)
         printf("%5.2f: pos=%d:  Trying to insert %d after %d\n",V->total_route_length,
             pos%n, T[(pos+1)%n].k, T[pos%n].k);
 #endif
- 
+
         post=postsert.evaluate(V,T[(pos+1)%n].k, T[pos%n].k, &M1);
         pre=presert.evaluate(V,T[(pos+1)%n].k, T[pos%n].k, &M2);
-        
+
         if(post || pre)
         {
             // At least 1 move is feasible
@@ -100,12 +100,12 @@ bool Sweep::Construct(class VRP *V)
         else
         {
             // Couldn't add before or after - start a new route
-            // We don't have to do anything here since we started w/ default 
+            // We don't have to do anything here since we started w/ default
             // singleton routes
-        
+
         }
     }
-    
+
 
     return true;
 }

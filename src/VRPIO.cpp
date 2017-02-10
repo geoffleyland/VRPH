@@ -83,7 +83,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
             // NAME
 
             temp2=strtok(NULL," ");
-            strcpy(name,temp2);        
+            strcpy(name,temp2);
             // Trim the ANNOYING \n if necessary...
             for(i=0;i<(int)strlen(name);i++)
             {
@@ -93,7 +93,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                     break;
                 }
             }
-        
+
 
 
 #if TSPLIB_DEBUG
@@ -115,7 +115,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 report_error("%s\n",__FUNCTION__);
             }
 
-            if( strncmp(temp2,"TSP",3)== 0) 
+            if( strncmp(temp2,"TSP",3)== 0)
                 problem_type=VRPH_TSP;
             if(strncmp(temp2,"CVRP",4)==0 || (strncmp(temp2,"DCVRP",5)!=0) )
                 problem_type=VRPH_CVRP;
@@ -171,7 +171,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
             {
                 edge_weight_format=VRPH_FULL_MATRIX;
             }
-            
+
             if(strncmp(temp2,"FUNCTION",8)==0)
             {
                 edge_weight_format=VRPH_FUNCTION;
@@ -200,7 +200,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 report_error("%s\n",__FUNCTION__);
             }
             break;
-        case 8:  
+        case 8:
             // EDGE_WEIGHT_TYPE
             edge_weight_type    = -1;
             temp2=strtok(NULL," ");
@@ -209,7 +209,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
 #if TSPLIB_DEBUG
             printf("Weight type is %s\n",temp2);
 #endif
-            
+
             // Determine the type of weight format
             if(strncmp(temp2,"EXPLICIT",8)==0)
             {
@@ -279,7 +279,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 // We didn't find a known type
                 fprintf(stderr,"Unknown/Unsupported EDGE_WEIGHT_TYPE %s encountered\n",temp2);
                 report_error("%s\n",__FUNCTION__);
-            }        
+            }
 
             break;
         case 9:
@@ -366,7 +366,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
 
         case 11:
             // NODE_COORD_SECTION
-            // Import the data 
+            // Import the data
             this->can_display=true;
 
 #if TSPLIB_DEBUG
@@ -386,7 +386,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 nodes[i].x=(double) a;
                 nodes[i].y=(double) b;
 
-                
+
                 i++;
 
             }
@@ -404,7 +404,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                     " multiple DEPOTs\n");
                 report_error("%s\n",__FUNCTION__);
             }
-                    
+
 #if TSPLIB_DEBUG
             printf("VRPH_DEPOT has coordinates: %f, %f\n",a,b);
 #endif
@@ -437,7 +437,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 if(d==NULL)
                 {
                     int n= num_nodes;
-                    
+
                     d = new double* [n+2];
                     d[0] = new double [(n+2)*(n+2)];
                     for(i = 1; i < n+2; i++)
@@ -446,7 +446,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
 
 
 
-                // Create the distance matrix using the appropriate 
+                // Create the distance matrix using the appropriate
                 // distance function...
                 create_distance_matrix(edge_weight_type);
             }
@@ -460,7 +460,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
 #endif
             // DEMAND_SECTION
             // Read in the demands
-                
+
             if(this->num_days<=1)
             {
                 i=0;
@@ -469,7 +469,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
 
                     fscanf(infile,"%d %d\n",&x,&y);
                     nodes[i].id=x;
-                    nodes[i].demand=y;                
+                    nodes[i].demand=y;
 
                     if(nodes[i].id>max_id)
                         max_id=nodes[i].id;
@@ -495,21 +495,21 @@ void VRP::read_TSPLIB_file(const char *node_file)
                     {
                         fscanf(infile,"%d",&y);
                         this->nodes[i].daily_demands[j]=y;
-                        
+
                     }
                     fscanf(infile,"%d\n",&y);
                     this->nodes[i].daily_demands[this->num_days]=y;
                     i++;
-                    
+
                 }
                 this->nodes[num_nodes+1].demand=0;
                 for(j=1;j<=this->num_days;j++)
                     this->nodes[num_nodes+1].daily_demands[j]=0;// Dummmy node
-                
+
 #if TSPLIB_DEBUG
                 printf("Done with multiple day demands\n");
 #endif
-            }            
+            }
 
 
             break;
@@ -519,15 +519,15 @@ void VRP::read_TSPLIB_file(const char *node_file)
 #if TSPLIB_DEBUG
             printf("Case 14\n");
 #endif
-           
+
             // EDGE_WEIGHT_SECTION
 
             // Make sure distance matrix is allocated
             if(d==NULL)
-            {                
+            {
                 d = new double* [num_nodes+2];
                 d[0] = new double [(num_nodes+2)*(num_nodes+2)];
-                for(i = 1; i < num_nodes+2; i++)    
+                for(i = 1; i < num_nodes+2; i++)
                     d[i] = d[i-1] + (num_nodes+2) ;
             }
 
@@ -548,7 +548,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 for(j=0;j<=num_nodes+1;j++)
                     d[num_nodes+1][j]=d[0][j];
 
-            }                
+            }
 
             if(edge_weight_format==VRPH_FULL_MATRIX)
             {
@@ -569,7 +569,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                     d[num_nodes+1][j]=d[0][j];
 
             }
-            
+
             // LOWER_DIAG_ROW format
             if(edge_weight_format==VRPH_LOWER_DIAG_ROW)
             {
@@ -680,7 +680,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
             break;
 
         case 17:
-        
+
             // NUM_DAYS
             this->num_days=atoi(strtok(NULL,""));
             break;
@@ -697,7 +697,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
 
                     fscanf(infile,"%d %lf\n",&x,&s);
                     nodes[i].id=x;
-                    nodes[i].service_time=s;                
+                    nodes[i].service_time=s;
                     total_service_time+=nodes[i].service_time;
 
                     if(nodes[i].id>max_id)
@@ -706,7 +706,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 }
                 nodes[num_nodes+1].service_time=0;
 
-                
+
             }
             else
             {
@@ -724,15 +724,15 @@ void VRP::read_TSPLIB_file(const char *node_file)
                     fscanf(infile,"%lf\n",&s);
                     this->nodes[i].daily_service_times[this->num_days]=s;
                     i++;
-                    
+
                 }
                 this->nodes[num_nodes+1].service_time=0;
                 for(j=1;j<=this->num_days;j++)
                     this->nodes[num_nodes+1].daily_service_times[j]=0;// Dummmy node
-                
-            }        
 
-            
+            }
+
+
             break;
         case 19:
             // TIME_WINDOW_SECTION
@@ -764,7 +764,7 @@ void VRP::read_TSPLIB_file(const char *node_file)
                 fscanf(infile,"%f\n",&b);
 
                 nodes[x-1].x=(double) a;
-                nodes[x-1].y=(double) b;                
+                nodes[x-1].y=(double) b;
                 i++;
 
             }
@@ -786,12 +786,12 @@ void VRP::read_TSPLIB_file(const char *node_file)
         }
     }
 
-}    
+}
 
 
 void VRP::write_TSPLIB_file(const char *outfile)
 {
-    /// 
+    ///
     /// Exports the data from an already loaded instance
     /// to a CVRP outfile in TSPLIB format (using EXACT_2D distance).
     ///
@@ -848,7 +848,7 @@ void VRP::write_TSPLIB_file(const char *outfile)
 void VRP::write_solution_file(const char *filename)
 {
     ///
-    /// Exports a solution to the designated filename in canonical form.  
+    /// Exports a solution to the designated filename in canonical form.
     /// Let N be the # of non-VRPH_DEPOT nodes in the problem. Then the first entry in the file
     /// is N and the following N+1 entries simply traverse the solution in order where we enter
     /// a node's negative index if it is the first node in a route.
@@ -857,7 +857,7 @@ void VRP::write_solution_file(const char *filename)
     /// the start index.
     /// Example:    Route 1:  0-3-2-0, Route 2:  0-4-1-0
     /// File is then:
-    /// 4 -1 4 -2 3 0    
+    /// 4 -1 4 -2 3 0
     ///
 
 
@@ -919,7 +919,7 @@ void VRP::write_solution_file(const char *filename)
 void VRP::write_solutions(int num_sols, const char *filename)
 {
     ///
-    /// Writes num_sols solutions from the solution warehouse to the designated filename. 
+    /// Writes num_sols solutions from the solution warehouse to the designated filename.
     /// The format is the same as for write_solution_file.
     ///
 
@@ -994,8 +994,8 @@ void VRP::write_tex_file(const char *filename)
     {
         fprintf(stderr,"Error opening %s for writing\n",filename);
         report_error("%s\n",__FUNCTION__);
-        
-    }    
+
+    }
 
     // The headers for the first page and pages thereafter
     fprintf(out,"%% TeX file automatically generated by VRPH for problem %s\n\n",this->name);
@@ -1073,7 +1073,7 @@ void VRP::read_solution_file(const char *filename)
     new_sol[0]=n;
     for(i=1;i<=n+1;i++)
         fscanf(in,"%d",new_sol+i);
-    
+
     // Import the buffer
     this->import_solution_buff(new_sol);
     fclose(in);
@@ -1151,7 +1151,7 @@ void VRP::import_solution_buff(int *sol_buff)
                 fprintf(stderr,"%d>%d:  rnum too big in import solution buff!\n",rnum,n);
                 for(i=0;i<=n;i++)
                     fprintf(stderr,"%d ",sol_buff[i]);
-        
+
                 report_error("%s\n",__FUNCTION__);
             }
 
@@ -1219,7 +1219,7 @@ void VRP::export_solution_buff(int *sol_buff)
 
     int i, current;
 
-    sol_buff[0]=num_nodes;    
+    sol_buff[0]=num_nodes;
 
     // Now output the ordering
     current=next_array[VRPH_DEPOT];
@@ -1250,7 +1250,7 @@ void VRP::export_canonical_solution_buff(int *sol_buff)
     int *start_buff;
 
     start_buff=new int[total_number_of_routes];
-    
+
     this->normalize_route_numbers();
 
     // First orient each route properly if the problem is symmetric
@@ -1288,7 +1288,7 @@ void VRP::export_canonical_solution_buff(int *sol_buff)
         }
         j++;
     }
-    
+
     sol_buff[j]=VRPH_DEPOT;
 
     delete [] start_buff;
@@ -1334,7 +1334,7 @@ void VRP::show_routes()
 
     while(route_start != 0 && i<num_nodes+1)
     {
-        // When we finally get a route beginning at 0, this is the last route 
+        // When we finally get a route beginning at 0, this is the last route
         // and there is no next route, so break out
         if(next_array[current_node]==0)
         {
@@ -1373,7 +1373,7 @@ void VRP::show_routes()
             i++;
             printf("%d",VRPH_DEPOT);
 
-            route_start = - (next_array[current_node]);    
+            route_start = - (next_array[current_node]);
             current_route = route_num[route_start];
             current_node = route_start;
 
@@ -1392,7 +1392,7 @@ void VRP::show_routes()
         }
     }
 
-    
+
 }
 
 
@@ -1472,7 +1472,7 @@ void VRP::summary()
         route[current_route].end,route[current_route].length,
         route[current_route].load,route[current_route].num_customers);
     // Check feasibility
-    if(route[current_route].length>this->max_route_length || 
+    if(route[current_route].length>this->max_route_length ||
         route[current_route].load > this->max_veh_capacity)
         feasible=false;
     cust_count+= route[current_route].num_customers;
@@ -1486,7 +1486,7 @@ void VRP::summary()
 
     while(route_start != 0 && i<num_nodes+1)
     {
-        // When we finally get a route beginning at 0, this is the last route 
+        // When we finally get a route beginning at 0, this is the last route
         // and there is no next route, so break out
         if(next_array[current_node]==0)
         {
@@ -1521,7 +1521,7 @@ void VRP::summary()
             total_nodes++;
             num_in_route=0;
 
-            route_start = - (next_array[current_node]);    
+            route_start = - (next_array[current_node]);
             current_route = route_num[route_start];
             current_node = route_start;
 
@@ -1530,7 +1530,7 @@ void VRP::summary()
                 route[current_route].load,route[current_route].num_customers);
             cust_count+= route[current_route].num_customers;
 
-            if(route[current_route].length>this->max_route_length || 
+            if(route[current_route].length>this->max_route_length ||
                 route[current_route].load > this->max_veh_capacity)
                 feasible=false;
 

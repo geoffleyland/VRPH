@@ -41,7 +41,7 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
     int *old_sol=NULL;
     if(rules & VRPH_TABU)
     {
-        // Remember the original solution 
+        // Remember the original solution
         old_sol=new int[V->num_original_nodes+2];
         V->export_solution_buff(old_sol);
     }
@@ -75,15 +75,15 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
         {
             i=VRPH_MAX(V->pred_array[j],0);
             k=VRPH_MAX(V->next_array[j],0);
-            
+
             // Four edges:  a-b, b-c, i-j, j-k
             // Now evaluate the 4 moves
 
             M.savings=VRP_INFINITY ;
 
             if(evaluate(V,a,b,i,j,rules, &M)==true)
-            {        
-                
+            {
+
                 if( ( (accept_type == VRPH_LI_ACCEPT) && ( M.savings<-VRPH_EPSILON )) ||
                     accept_type==VRPH_FIRST_ACCEPT )
                 {
@@ -120,10 +120,10 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
                 }
 
             }
-            
+
 
             if(evaluate(V,a,b,j,k,rules, &M)==true)
-            {    
+            {
                 if( ( (accept_type == VRPH_LI_ACCEPT) && ( M.savings<-VRPH_EPSILON )) ||
                     accept_type==VRPH_FIRST_ACCEPT )
                 {
@@ -158,7 +158,7 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
                 }
 
             }
-            
+
 
             if(evaluate(V,b,c,i,j,rules, &M)==true)
             {
@@ -197,7 +197,7 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
                 }
 
             }
-            
+
 
             if(evaluate(V,b,c,j,k,rules, &M)==true)
             {
@@ -241,9 +241,9 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
 
         if(j==VRPH_DEPOT && j!=b)
         {
-            // In this case we have many edges to consider 
-            // We will consider all edges of the form VRPH_DEPOT-t 
-            // and t-VRPH_DEPOT            
+            // In this case we have many edges to consider
+            // We will consider all edges of the form VRPH_DEPOT-t
+            // and t-VRPH_DEPOT
 
             int current_start, current_end, current_route;
             current_start=abs(V->next_array[VRPH_DEPOT]);
@@ -289,7 +289,7 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
                             best_edges[0]=a;best_edges[1]=b;best_edges[2]=VRPH_DEPOT;best_edges[3]=t;
                         }
 
-                    }    
+                    }
                 }
 
                 if(evaluate(V,b,c,VRPH_DEPOT,t,rules, &M)==true)
@@ -327,10 +327,10 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
                             best_edges[0]=b;best_edges[1]=c;best_edges[2]=VRPH_DEPOT;best_edges[3]=t;
                         }
 
-                    }    
+                    }
                 }
 
-                // Now try the t-VRPH_DEPOT edge                
+                // Now try the t-VRPH_DEPOT edge
                 current_route= V->route_num[current_start];
                 current_end= V->route[current_route].end;
                 t=current_end;
@@ -416,15 +416,15 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
                 if(current_start==VRPH_DEPOT)    // We're done
                     break;
             }
-            
+
             // end VRPH_DEPOT loop
-            
+
         }
         // end j loop
     }
     // end ii loop
 
-    
+
     if(accept_type==VRPH_FIRST_ACCEPT || BestM.savings==VRP_INFINITY)
     {
         if(rules&VRPH_TABU)
@@ -432,11 +432,11 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
         return false;        // No moves found
     }
 
-    
+
 
     if(accept_type==VRPH_BEST_ACCEPT || accept_type==VRPH_LI_ACCEPT)
     {
-        
+
         if(move(V,&BestM)==false)
         {
             fprintf(stderr,"%f:  (%d[%d]-%d[%d], %d[%d]-%d[%d])\n",BestM.savings,
@@ -468,7 +468,7 @@ bool TwoOpt::search(class VRP *V, int b, int rules)
             }
         }
     }
-    
+
     report_error("%s: search shouldn't get here!\n",__FUNCTION__);
 
     return false;
@@ -526,7 +526,7 @@ bool TwoOpt::route_search(class VRP *V, int r1, int r2, int rules)
 
             // a-b, i-j
             if(evaluate(V,a,b,i,j,rules, &M)==true)
-            {    
+            {
                 if(accept_type==VRPH_FIRST_ACCEPT || (accept_type==VRPH_LI_ACCEPT && M.savings<-VRPH_EPSILON) )
                 {
                     if(move(V,&M)==false)
@@ -534,7 +534,7 @@ bool TwoOpt::route_search(class VRP *V, int r1, int r2, int rules)
                     else
                         return true;
 
-                }                
+                }
 
                 if(accept_type == VRPH_LI_ACCEPT || accept_type==VRPH_BEST_ACCEPT)
                 {
@@ -569,7 +569,7 @@ bool TwoOpt::route_search(class VRP *V, int r1, int r2, int rules)
         // Make the best move
 
         if(move(V, &BestM)==false)
-            report_error("%s: best move is false\n",__FUNCTION__);            
+            report_error("%s: best move is false\n",__FUNCTION__);
         else
             return true;
     }
@@ -584,7 +584,7 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
     /// provided rules.  If the move meets the rules, then
     /// the relevant changes to the solution are stored in the VRPMove M and
     /// the function returns true.  Returns false otherwise.
-    /// 
+    ///
     ///
 
     V->num_evaluations[TWO_OPT_INDEX]++;
@@ -611,7 +611,7 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
     if(c==VRPH_DEPOT) num_depot_edges++;
     if(d==VRPH_DEPOT) num_depot_edges++;
     if(num_depot_edges>1)
-        return false;    
+        return false;
 
     M->eval_arguments[0]=a;M->eval_arguments[1]=b;M->eval_arguments[2]=c;M->eval_arguments[3]=d;
     M->evaluated_savings=false;
@@ -629,7 +629,7 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
         c_route= V->route_num[d];
 
     // Check for INTER/INTRA restrictions
-    
+
     if( ( rules & VRPH_INTER_ROUTE_ONLY) && (a_route==c_route) )
         return false;
 
@@ -643,7 +643,7 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
     if(a_route==c_route)
     {
         M->num_affected_routes=1;
-        M->savings = ( V->d[a][c]+V->d[b][d] -V->nodes[c].service_time) - 
+        M->savings = ( V->d[a][c]+V->d[b][d] -V->nodes[c].service_time) -
             ( V->d[a][b]+V->d[c][d]-V->nodes[b].service_time );
 
         // Can check feasibility
@@ -663,25 +663,25 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
 
         if(M->savings/2+V->route[a_route].length> V->max_route_length &&
             M->savings/2+V->route[c_route].length> V->max_route_length)
-            return false;    
+            return false;
     }
 
     M->evaluated_savings=false;
     if( (V->check_savings(M, rules))==false)
-        return false;    
+        return false;
 
 
 #endif
 
     // Otherwise, the move is reasonable to consider further...
 
-    
+
     if(a_route==c_route)
     {
 
         // same route-- the 2opt move here corresponds to reversing the portion of
         // this route that is between a and c
-        Flip flip;    
+        Flip flip;
 
         // First the easy case - VRPH_DEPOT not involved
 
@@ -690,16 +690,16 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
 
             if(V->before(a,c)==true)
             {
-                
-                    
+
+
                 if( (flip.evaluate(V,a,d,M)==true)&&(V->check_move(M, rules)==true))
                 {
-                    
+
                     return true;
                 }
                 else
                 {
-                    
+
                     return false;
                 }
             }
@@ -708,21 +708,21 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
                 // a is after c
                 if( (flip.evaluate(V,c,b,M)==true) &&(V->check_move(M, rules)==true))
                 {
-                    
+
                     return true;
                 }
                 else
                 {
-                
+
                     return false;
                 }
-                
+
             }
         }
         else // VRPH_DEPOT involved
-        {    
-            // Otherwise, we have a VRPH_DEPOT node 
-            // We'll need to use the dummy node 
+        {
+            // Otherwise, we have a VRPH_DEPOT node
+            // We'll need to use the dummy node
             int dummy= V->dummy_index;
 
             if(a==VRPH_DEPOT)
@@ -868,7 +868,7 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
 
         V->postsert_dummy(a);
         if( (swap_ends.evaluate(V,c,a,M)==true)&&(V->check_move(M, rules)==true))
-        {            
+        {
             V->remove_dummy();
             return true;
         }
@@ -884,7 +884,7 @@ bool TwoOpt::evaluate(class VRP *V, int a, int b, int c, int d, int rules, VRPMo
 
     report_error("%s: should never get here!\n",__FUNCTION__);
     return false;
-    
+
 }
 
 bool TwoOpt::move(class VRP *V, VRPMove *M)
@@ -903,7 +903,7 @@ bool TwoOpt::move(class VRP *V, VRPMove *M)
     a=M->eval_arguments[0];b=M->eval_arguments[1];c=M->eval_arguments[2];d=M->eval_arguments[3];
 
     V->num_moves[TWO_OPT_INDEX]++;
-    
+
     if(M->move_type==FLIP && M->move_type==SWAP_ENDS)
         report_error("%s: unknown move type\n",__FUNCTION__);
 
@@ -940,7 +940,7 @@ bool TwoOpt::move(class VRP *V, VRPMove *M)
 
         if(flip.move(V, M->move_arguments[0], M->move_arguments[1])==true)
         {
-            
+
             if(uses_dummy)
                 V->remove_dummy();
 
@@ -966,7 +966,7 @@ bool TwoOpt::move(class VRP *V, VRPMove *M)
     {
         if(uses_dummy)
             V->remove_dummy();
-        
+
         V->capture_best_solution();
 
 #if TWO_OPT_VERIFY

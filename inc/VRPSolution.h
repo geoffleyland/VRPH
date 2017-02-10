@@ -29,7 +29,7 @@ public:
 	int n;			// # of non-DEPOT nodes in the solution
 	int *sol;		// Place for a solution buffer
 	double time;	// time at which the solution was first discovered
-	int hash(int salt);	
+	int hash(int salt);
 
 };
 
@@ -42,7 +42,7 @@ public:
 
 	VRPSolutionWarehouse(int num_sols, int n);
 
-	
+
 	int num_sols;
 	int max_size;
 	double worst_obj;
@@ -53,7 +53,7 @@ public:
 	bool liquidate();
 	void sort_sols();
 	void show();
-	
+
 
 };
 

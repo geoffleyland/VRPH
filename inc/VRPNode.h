@@ -16,20 +16,20 @@
 #define VRPTW                    0
 #define MAX_NEIGHBORLIST_SIZE    75
 
-class VRPNode 
+class VRPNode
 {
 public:
-    
+
     double x;
     double y;
-    double r;        // For polar    
+    double r;        // For polar
     double theta;    // coordinates
     int id;
     int demand;
     int *daily_demands; // For period VRPs
     int cluster;
     VRPNeighborElement neighbor_list[MAX_NEIGHBORLIST_SIZE];
-           
+
     double service_time;
     // represents the time required at the node
     double *daily_service_times; // For period VRPs
@@ -39,7 +39,7 @@ public:
     double end_tw;// Time windows
 
     int num_days; // For multi-day VRPs
-    
+
     // Constructor
     VRPNode();
     // Constructor for a d-day problem
@@ -50,7 +50,7 @@ public:
     // Duplication
     void duplicate(VRPNode *N);
     void show();
-    
+
   };
 
 #endif

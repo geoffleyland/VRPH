@@ -93,7 +93,7 @@
 
 // Miscellaneous defines
 // Set this to 1 if you want to have different random
-// seeds that incorporate time - 
+// seeds that incorporate time -
 // otherwise the solution should be repeatable
 #define VRPH_ADD_ENTROPY            0
 // Set this to 1 if you want to prevent "trivial"

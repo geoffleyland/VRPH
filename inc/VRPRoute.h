@@ -23,17 +23,17 @@
 
 class VRPRoute
 {
-	/// 
+	///
 	/// Stores information about a particular route.  The ordering
 	/// field is not updated during the search and is filled in
 	/// only when requested.
 	///
 public:
-	
+
 	VRPRoute();
 	VRPRoute(int n);
 	~VRPRoute();
-	
+
 	int start;
 	int end;
 	double length;
@@ -43,20 +43,20 @@ public:
 
 	int hash_val;
 	int hash_val2;
-	
+
 	double total_service_time;
 	double time;
 	double *x;
 	double *y;
 
 	char *name;		// Used when we add a route to an IP as a column
-	
+
 	double x_center;
 	double y_center;
 
 	double min_theta;
 	double max_theta;
-	
+
 	int neighboring_routes[MAX_NEIGHBORING_ROUTES];
 
 	int *ordering;

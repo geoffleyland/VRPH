@@ -36,7 +36,7 @@ VRPSolutionWarehouse::VRPSolutionWarehouse(int max_sols, int n)
     this->max_size=max_sols;
     this->sols=new VRPSolution[this->max_size];
     // This calls the default constructor so we have to allocate the memory for
-    // the sol buffer still... 
+    // the sol buffer still...
     for(int i=0;i<this->max_size;i++)
         this->sols[i].sol=new int[n+2];
 
@@ -57,7 +57,7 @@ VRPSolutionWarehouse::~VRPSolutionWarehouse()
     ///
 
     if(this->hash_table)
-        delete [] this->hash_table;    
+        delete [] this->hash_table;
     //for(int i=0;i<this->max_size;i++)
     //    this->sols[i].~VRPSolution();
 
@@ -76,7 +76,7 @@ int VRPSolutionWarehouse::add_sol(VRPSolution *new_sol, int start_index)
     /// to begin the search -- useful when inserting multiple solutions
     /// whose order is already known.  Use start_index=0 if no information
     /// about the solution's position  is known.  The VRPSolution being passed
-    /// in should be in "canonical form" for the hash function to work 
+    /// in should be in "canonical form" for the hash function to work
     /// properly!!
     ///
 
@@ -209,7 +209,7 @@ void VRPSolutionWarehouse::show()
 
 }
 bool VRPSolutionWarehouse::liquidate()
-{    
+{
     ///
     /// Removes all solutions from the warehouse.
     ///
@@ -219,7 +219,7 @@ bool VRPSolutionWarehouse::liquidate()
     for(i=0;i<this->num_sols;i++)
         // Erase the existing solutions
         memset(this->sols[i].sol,0,this->sols[i].n*sizeof(int));
-    
+
     this->num_sols=0;
     this->worst_obj=VRP_INFINITY;
 
@@ -233,7 +233,7 @@ bool VRPSolutionWarehouse::liquidate()
 
         }
         this->hash_table[i].num_vals=0;
-        
+
     }
 
     return true;
@@ -254,8 +254,8 @@ void VRPSolutionWarehouse::sort_sols()
 }
 int VRPSolution::hash(int salt)
 {
-    /// 
-    /// Computes a hash of the solution, 
+    ///
+    /// Computes a hash of the solution,
     /// returning an integer in the range [0,n-1].  The solution
     /// buffer should be in canonical form so that the hash value is in terms
     /// of the ordering.
@@ -263,7 +263,7 @@ int VRPSolution::hash(int salt)
 
     int val = 0;
     int i;
-    
+
     for(i=0;i<this->n-1; i++)//was -2??
         val ^= (randvals[(salt + VRPH_ABS(this->sol[i])+VRPH_ABS(this->sol[VRPH_MIN((this->n)-1,i+1)]) )% NUM_RANDVALS]);
 
@@ -276,7 +276,7 @@ int VRPSolution::hash(int salt)
 
 VRPSolution::VRPSolution(int n)
 {
-    /// 
+    ///
     /// Constructor for an n-node VRPSolution.
     ///
 
@@ -292,10 +292,10 @@ VRPSolution::VRPSolution(int n)
 
 VRPSolution::VRPSolution()
 {
-    /// 
+    ///
     /// Default constructor for the VRPSolution.
     ///
-    
+
     this->n=0;
     this->time=0;
     this->in_IP=false;

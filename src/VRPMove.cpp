@@ -23,7 +23,7 @@ VRPMove::VRPMove()
     this->total_number_of_routes=-1;
 
     this->arrival_times=NULL;
-    
+
 }
 
 VRPMove::VRPMove(int n)
@@ -51,8 +51,8 @@ bool VRPMove::is_better(VRP *V, VRPMove *M2, int rules)
     ///
     /// Evaluates this move versus M2 in terms of the provided
     /// rules.  Returns true of this move is superior to M2
-    /// and false otherwise.  
-    /// 
+    /// and false otherwise.
+    ///
 
     if(M2->num_affected_routes==-1)
     {
@@ -72,7 +72,7 @@ bool VRPMove::is_better(VRP *V, VRPMove *M2, int rules)
             return true;
         else
             return false;
-        
+
     }
 
 
@@ -93,7 +93,7 @@ bool VRPMove::is_better(VRP *V, VRPMove *M2, int rules)
             if(this->savings < M2->savings)
                 return true;
             else
-                return false;    
+                return false;
         }
 
         // If they affect the same # of routes, minimize the sum of the squares
@@ -120,7 +120,7 @@ bool VRPMove::is_better(VRP *V, VRPMove *M2, int rules)
         if(this->savings <= M2->savings)
             return true;
         else
-            return false;    
+            return false;
     }
 
 

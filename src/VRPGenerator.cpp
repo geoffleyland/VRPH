@@ -27,7 +27,7 @@ void generate_li_vrp(int A, int B, int Q, int L, const char *outfile)
 	}
 
 	n= A*B;
-	
+
 	fprintf(out,"NAME: Li_Benchmark_%d_%d.vrp\n",A,B);
 	fprintf(out,"COMMENT: None\n");
 	fprintf(out,"TYPE: CVRP\n");

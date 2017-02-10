@@ -13,13 +13,13 @@
 #include "VRPH.h"
 
 bool Postsert::evaluate(class VRP *V, int u, int i, VRPMove *M)
-{    
+{
     ///
-    /// Evaluates the move of placing u AFTER node i in 
+    /// Evaluates the move of placing u AFTER node i in
     /// whatever route node i is currently in.  If a move
     /// is found, the relevant solution modification information
     /// is placed in the VRPMove M
-    ///    
+    ///
 
     if(V->routed[u]==false || V->routed[i]==false)
         return false;
@@ -32,11 +32,11 @@ bool Postsert::evaluate(class VRP *V, int u, int i, VRPMove *M)
 
     n= V->num_nodes;
     i_route= V->route_num[i];
-    u_route= V->route_num[u];    
+    u_route= V->route_num[u];
 
     if(V->next_array[i]==u)
     {
-        // Nothing to do - 
+        // Nothing to do -
         return false;
     }
 
@@ -95,7 +95,7 @@ bool Postsert::evaluate(class VRP *V, int u, int i, VRPMove *M)
         // No overall change in the load here - we just shifted u around
         load_change = 0;
         // The total length of route i is now old_length + savings
-        i_change = savings; 
+        i_change = savings;
         i_length = V->route[i_route].length + i_change;
         i_load = V->route[i_route].load;
         // Same route
@@ -106,7 +106,7 @@ bool Postsert::evaluate(class VRP *V, int u, int i, VRPMove *M)
     {
         // Different routes
         i_change = i_gain;
-        load_change = V->nodes[u].demand; 
+        load_change = V->nodes[u].demand;
 
         i_length = V->route[i_route].length + i_change;
         i_load = V->route[i_route].load + load_change;
@@ -114,14 +114,14 @@ bool Postsert::evaluate(class VRP *V, int u, int i, VRPMove *M)
         u_load = V->route[u_route].load - load_change;
     }
 
-    // Check feasibility  
-    if( (i_length > V->max_route_length) || (u_length > V->max_route_length) || 
+    // Check feasibility
+    if( (i_length > V->max_route_length) || (u_length > V->max_route_length) ||
         (i_load > V->max_veh_capacity)   || (u_load > V->max_veh_capacity) )
     {
         return false;
     }
 
-    // else the move is feasible - record the move 
+    // else the move is feasible - record the move
 
 
     if(u_route==i_route)
@@ -185,10 +185,10 @@ bool Postsert::move(VRP *V, int u, int i)
 {
 
     ///
-    /// This function inserts node number u AFTER node i in 
+    /// This function inserts node number u AFTER node i in
     /// whatever route node i is currently in and modifies all
     /// relevant solution information.
-    /// 
+    ///
 
     int pre_i, post_i, pre_u, post_u;
     int start_u,end_u, start_i, end_i;
@@ -283,7 +283,7 @@ bool Postsert::move(VRP *V, int u, int i)
         new_i_end= u;
     }
     else
-        new_i_end=end_i;    
+        new_i_end=end_i;
 
     // Special case
     if(post_i==-u)
@@ -297,7 +297,7 @@ bool Postsert::move(VRP *V, int u, int i)
         V->pred_array[u]=i;
 
         // VRPH_ADDED
-        V->next_array[u]=-VRPH_ABS(post_u);  
+        V->next_array[u]=-VRPH_ABS(post_u);
         // post_u is now the beginning of u's old route
         V->pred_array[VRPH_ABS(post_u)]=-u;
 
@@ -344,12 +344,12 @@ bool Postsert::move(VRP *V, int u, int i)
         V->next_array[VRPH_ABS(pre_u)]=-VRPH_ABS(post_u);
         V->pred_array[VRPH_ABS(post_u)]=-VRPH_ABS(pre_u);
 
-    }    
+    }
 
     // The element who used to be after u is now preceded by the element
     // that was before u
 
-    // The element who used to be after i is now preceded by u 
+    // The element who used to be after i is now preceded by u
     //if(post_i>=0)// CHANGED 8/11/2008
     if(post_i>0)
         V->pred_array[post_i]=u;
@@ -364,8 +364,8 @@ bool Postsert::move(VRP *V, int u, int i)
     // Now update u's former route
 
     if(start_u==u && end_u ==u)
-        return true;        
-    
+        return true;
+
 
     if(u_route==i_route)
     {

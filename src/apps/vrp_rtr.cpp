@@ -16,7 +16,7 @@
 int main(int argc, char *argv[])
 {
     ///
-    /// This is the main() routine to construct a command line tool 
+    /// This is the main() routine to construct a command line tool
     /// for solving VRP's using the record-to-record
     /// travel algorithm.
     ///
@@ -61,44 +61,44 @@ int main(int argc, char *argv[])
 
 
     if(argc<2 || (strncmp(argv[1],"-help",5)==0)||(strncmp(argv[1],"--help",6)==0)||(strncmp(argv[1],"-h",2)==0))
-    {        
+    {
         fprintf(stderr,"Usage: %s -f <vrp_input_file> [options]\n",argv[0]);
         fprintf(stderr,"Options:\n");
-        
-        fprintf(stderr,"\t-help prints this help message\n"); 
-        
+
+        fprintf(stderr,"\t-help prints this help message\n");
+
         fprintf(stderr,"\t-a <accept_type> 0 for VRPH_FIRST_ACCEPT or 1 for VRPH_BEST_ACCEPT\n\t\t(default is VRPH_FIRST_ACCEPT)\n");
-        
+
         fprintf(stderr,"\t-d <deviation> runs the RTR search with given deviation\n");
         fprintf(stderr,"\t\t default is dev=.01\n");
 
         fprintf(stderr,"\t-fix <fixed_edge_file> will fix all of the edges in the provided file\n");
-                
+
         fprintf(stderr,"\t-h <heuristic> applies the specified heuristics (can be repeated)\n");
         fprintf(stderr,"\t\t default is ONE_POINT_MOVE, TWO_POINT_MOVE, and TWO_OPT\n");
         fprintf(stderr,"\t\t others available are OR_OPT, THREE_OPT, and CROSS_EXCHANGE\n");
         fprintf(stderr,"\t\t Example: -h OR_OPT -h THREE_OPT -h TWO_OPT -h ONE_POINT_MOVE\n");
         fprintf(stderr,"\t\t Setting -h KITCHEN_SINK applies all heuristics in the \n");
         fprintf(stderr,"\t\t improvement phase\n");
-        
+
         fprintf(stderr,"\t-sol <sol_file> begins with an existing solution contained\n");
         fprintf(stderr,"\t\t in sol_file\n");
-        
+
         fprintf(stderr,"\t-v prints verbose output to stdout\n");
-        
+
         fprintf(stderr,"\t-k <intensity> runs the RTR search with the provided intensity\n\t\t(default is 30)\n");
 
         fprintf(stderr,"\t-L <num_lambdas> runs the RTR procedure from num_lambdas\n");
         fprintf(stderr,"\t\t different initial solutions using a random lambda chosen\n");
         fprintf(stderr,"\t\t from (0.5,2.0)\n");
         fprintf(stderr,"\t\t default is to use lambda in {.6, 1.4, 1.6}.\n");
-        
+
         fprintf(stderr,"\t-m <max_tries> gives up after not beating a local minimum after\n");
         fprintf(stderr,"\t\t max_tries consecutive attempts (default is 5)\n");
 
         fprintf(stderr,"\t-N <nlist_size> uses the nlist_size nearest neighbors in the search\n");
         fprintf(stderr,"\t\t default is 25. Using -N 0 will not use neighbor lists at all\n");
-        
+
         fprintf(stderr,"\t-P <num_perturbs> perturbs the current solution num_perturbs times\n\t\t(default is 1)\n");
 
         fprintf(stderr,"\t-p <perturb_type> 0 for VRPH_LI_PERTURB or 1 for VRPH_OSMAN_PERTURB\n");
@@ -111,11 +111,11 @@ int main(int argc, char *argv[])
         fprintf(stderr,"\t-r will search the neighborhood in a random fashion\n");
 
         fprintf(stderr,"\t-t <tabu_list_size> will use a primitive Tabu Search in the uphill phase\n");
-        
+
         fprintf(stderr,"\t-out <out_file> writes the solution to the provided file\n");
-        
-        
-        
+
+
+
         exit(-1);
     }
 
@@ -143,11 +143,11 @@ int main(int argc, char *argv[])
 
 
     VRP V(n,num_days);
-       
-        
+
+
 
     // Allocate the buffer for the final solution
-    final_sol=new int[n+2];    
+    final_sol=new int[n+2];
 
     // Parse command line
     for(i=2;i<argc;i++)
@@ -259,13 +259,13 @@ int main(int argc, char *argv[])
 
         if(strcmp(argv[i],"-t")==0)
         {
-            tabu=VRPH_TABU;    
+            tabu=VRPH_TABU;
             tabu_list_size=atoi(argv[i+1]);
-        }        
+        }
 
         if(strcmp(argv[i],"-v")==0)
             verbose=true;
-        
+
     }
 
     // Load the problem data
@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
         V.set_daily_demands(1);
         V.set_daily_service_times(1);
     }
-   
+
 
     // Start processing the input options
     if(new_lambdas==false)
@@ -290,18 +290,18 @@ int main(int argc, char *argv[])
         lambda_vals[2]=1.6;
     }
 
-    // Start constructing the list of optional heuristics we will we use 
+    // Start constructing the list of optional heuristics we will we use
     if(nlist_size==0)
         // No neighbor lists
         neighbor_lists=0;
-    else     
+    else
         neighbor_lists=VRPH_USE_NEIGHBOR_LIST;
     heuristics|=neighbor_lists;
 
     if(has_heuristics==false)
         // Use default set of operators
         heuristics|=(ONE_POINT_MOVE|TWO_POINT_MOVE|TWO_OPT);
-    
+
 
     // Add in Tabu Search if requested
     heuristics+=tabu;
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
 
             // Construct a new Clarke Wright solution
             CW.Construct(&V,lambda_vals[i], false);
-            CW.has_savings_matrix=false;    
+            CW.has_savings_matrix=false;
 
             if(V.get_total_route_length()-V.get_total_service_time() < final_obj)
             {
@@ -343,9 +343,9 @@ int main(int argc, char *argv[])
 #endif
 
             // Run the record-to-record travel algorithm with the given parameters
-            V.RTR_solve(heuristics, intensity, max_tries, num_perturbs, dev, nlist_size, 
+            V.RTR_solve(heuristics, intensity, max_tries, num_perturbs, dev, nlist_size,
                 perturb_type, accept_type, verbose);
-        
+
             // Check for a new global best solution - recall the best solution found
             V.get_best_sol_buff(my_sol_buff);
             V.import_solution_buff(my_sol_buff);
@@ -354,7 +354,7 @@ int main(int argc, char *argv[])
                 final_obj = V.get_total_route_length()-V.get_total_service_time();
                 V.export_canonical_solution_buff(final_sol);
             }
-            
+
             if(verbose)
                 printf("%5.2f\n",V.get_best_total_route_length()-V.get_total_service_time());
 
@@ -373,19 +373,19 @@ int main(int argc, char *argv[])
         V.set_best_total_route_length(V.get_total_route_length());
 
         // Now improve it
-        V.RTR_solve(heuristics, intensity, max_tries, num_perturbs, dev, nlist_size, 
+        V.RTR_solve(heuristics, intensity, max_tries, num_perturbs, dev, nlist_size,
             perturb_type, accept_type,verbose);
 
         V.export_canonical_solution_buff(final_sol);
     }
 
     stop=clock();
-   
+
     // Restore the best solution found
     V.import_solution_buff(final_sol);
-    
+
     elapsed=(double)(stop-start)/CLOCKS_PER_SEC;
-  
+
     if(verbose)
     {
         V.summary();
@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
 
     return 0;
 
-    
+
 
 }
 
